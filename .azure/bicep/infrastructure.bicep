@@ -156,26 +156,26 @@ module pingAlertRule 'pingAlertRule.bicep' = {
 // Build in roles:
 // https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles
 
-module raStorageAccountContri 'rbac.bicep' = {
-  name: 'raStorageAccountContri'
-  params: {
-    identityId: functionApp.outputs.systemPrincipalId
-    roleNameGuid: '17d1049b-9a84-46fb-8f53-869881c3d3ab'
-  }
-}
+// module raStorageAccountContri 'rbac.bicep' = {
+//   name: 'raStorageAccountContri'
+//   params: {
+//     identityId: functionApp.outputs.systemPrincipalId
+//     roleNameGuid: '17d1049b-9a84-46fb-8f53-869881c3d3ab'
+//   }
+// }
 
-module raStorageBlobOwner 'rbac.bicep' = {
-  name: 'raStorageBlobOwner'
-  params: {
-    identityId: functionApp.outputs.systemPrincipalId
-    roleNameGuid: 'b7e6dc6d-f1e8-4753-8033-0f276bb0955b'
-  }
-}
+// module raStorageBlobOwner 'rbac.bicep' = {
+//   name: 'raStorageBlobOwner'
+//   params: {
+//     identityId: functionApp.outputs.systemPrincipalId
+//     roleNameGuid: 'b7e6dc6d-f1e8-4753-8033-0f276bb0955b'
+//   }
+// }
 
-module raStorageQueueDataCon 'rbac.bicep' = {
-  name: 'raStorageQueueDataCon'
-  params: {
-    identityId: functionApp.outputs.systemPrincipalId
-    roleNameGuid: '974c5e8b-45b9-4653-ba55-5f855dd0fb88'
-  }
-}
+// module raStorageQueueDataCon 'rbac.bicep' = {
+//   name: 'raStorageQueueDataCon'
+//   params: {
+//     identityId: functionApp.outputs.systemPrincipalId
+//     roleNameGuid: '974c5e8b-45b9-4653-ba55-5f855dd0fb88'
+//   }
+// }
