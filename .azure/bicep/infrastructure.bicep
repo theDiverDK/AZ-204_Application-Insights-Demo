@@ -99,18 +99,18 @@ module plan 'appServicePlan.bicep' = {
 }
 
 //Function App
-var functionAppName = '${appName}-${env}-func'
-module functionApp 'functionApp.bicep' = {
-  name: functionAppName
-  params: {
-    appName: functionAppName
-    farmId: plan.outputs.id
-    applicationInsightInstrumentationKey: appInsight.outputs.instrumentationKey
-    location: location
-    storageAccountConnectionString: storageAccount.outputs.connectionString
-    //  storageAccountName: storageAccount.outputs.name
-  }
-}
+// var functionAppName = '${appName}-${env}-func'
+// module functionApp 'functionApp.bicep' = {
+//   name: functionAppName
+//   params: {
+//     appName: functionAppName
+//     farmId: plan.outputs.id
+//     applicationInsightInstrumentationKey: appInsight.outputs.instrumentationKey
+//     location: location
+//     storageAccountConnectionString: storageAccount.outputs.connectionString
+//     //  storageAccountName: storageAccount.outputs.name
+//   }
+// }
 
 //Web App
 var webAppName = '${appName}-${env}-app'
