@@ -1,0 +1,38 @@
+trigger: none
+#  branches:
+#    include:
+#      - main
+#  paths:
+#    include:
+#      - .ado/*
+#      - .azure/*
+
+pool:
+  name: 'Minecraft server'
+  vmImage: 'ubuntu-latest'
+
+variables:
+  - group: 'Production Variables'
+
+pr: none
+
+steps:
+  - task: AzureCLI@2
+    displayName: Create or update the resource group
+    inputs:
+      azureSubscription: '$(azureServiceConnectionName)'
+      scriptType: pscore
+      scriptLocation: inlineScript
+      inlineScript: |
+        az group create --location $(location) --name $(resourceGroupName)
+
+  - task: AzureResourceManagerTemplateDeployment@3
+    displayName: 'Deploy all infrastructure'
+    inputs:
+      connectedServiceName: $(azureServiceConnectionName)
+      location: $(location)
+      resourceGroupName: $(resourceGroupName)
+      csmFile: .azure/bicep/infrastructure.bicep
+      overrideParameters:
+        -appName $(appName)
+        -env $(environment)

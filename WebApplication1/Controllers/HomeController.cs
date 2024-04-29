@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Azure.Storage.Blobs;
-using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.Azure.Cosmos;
 using Microsoft.AspNetCore.Authorization;
 using WebApplication1.Models;
@@ -10,7 +9,8 @@ namespace Application_Insight.Controllers;
 
 class Product
 {
-    public string name {
+    public string? Name
+    {
         get;
         set;
     }
@@ -58,7 +58,7 @@ public class HomeController : Controller
                FeedResponse<Product> batch =  iterator.ReadNextAsync().GetAwaiter().GetResult();
                foreach (Product item in batch)
                {
-                   cosmosResult = cosmosResult + item.name + ", ";
+                   cosmosResult = cosmosResult + item.Name + ", ";
                }
         }
 
