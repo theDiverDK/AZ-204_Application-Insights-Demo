@@ -25,32 +25,6 @@ module appInsight 'appInsight.bicep' = {
   }
 }
 
-//Key Vault
-var keyVaultName = '${appName}-${env}-kv'
-module keyVault 'keyVault.bicep' = {
-  name: keyVaultName
-  params: {
-    keyVaultName: keyVaultName
-    location: location
-  }
-}
-
-//Set secret in Key Vault
-// var secretName = 'hemmelighed'
-// var secretValue = 'Top Secret'
-
-// module keyVaultSecret 'keyVaultSecret.bicep' = {
-//   name: secretName
-//   params: {
-//     keyVaultName: keyVaultName
-//     secretName: secretName
-//     secretValue: secretValue
-//   }
-//   dependsOn: [
-//     keyVault
-//   ]
-// }
-
 //Storage Account
 var storageAccountName = toLower('${appName}${env}st')
 module storageAccount 'storageAccount.bicep' = {
@@ -59,34 +33,6 @@ module storageAccount 'storageAccount.bicep' = {
     location: location
     storageAccountName: storageAccountName
   }
-}
-
-//Store App Insight connection string in Keyvault
-var appInsightConnectionStringName = 'applicationInsightConnectionString'
-module keyVaulAppInsightConnectionString 'keyVaultSecret.bicep' = {
-  name: appInsightConnectionStringName
-  params: {
-    keyVaultName: keyVaultName
-    secretName: appInsightConnectionStringName
-    secretValue: appInsight.outputs.appInsightConnectionString
-  }
-  dependsOn: [
-    keyVault
-  ]
-}
-
-//Store App Insight connection string in Keyvault
-var storageAccountConnectionStringName = 'storageAccountConnectionString'
-module keyVaulStorageAccountConnectionString 'keyVaultSecret.bicep' = {
-  name: appInsightConnectionStringName
-  params: {
-    keyVaultName: keyVaultName
-    secretName: storageAccountConnectionStringName
-    secretValue: storageAccount.outputs.connectionString
-  }
-  dependsOn: [
-    keyVault
-  ]
 }
 
 //Group Alert
@@ -110,19 +56,6 @@ module plan 'appServicePlan.bicep' = {
   }
 }
 
-//Function App
-// var functionAppName = '${appName}-${env}-func'
-// module functionApp 'functionApp.bicep' = {
-//   name: functionAppName
-//   params: {
-//     appName: functionAppName
-//     farmId: plan.outputs.id
-//     applicationInsightInstrumentationKey: appInsight.outputs.instrumentationKey
-//     location: location
-//     storageAccountConnectionString: storageAccount.outputs.connectionString
-//     //  storageAccountName: storageAccount.outputs.name
-//   }
-// }
 
 //Web App
 var webAppName = '${appName}-${env}-app'
