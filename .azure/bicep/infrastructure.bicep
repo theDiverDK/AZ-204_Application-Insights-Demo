@@ -51,6 +51,16 @@ module keyVault 'keyVault.bicep' = {
 //   ]
 // }
 
+//Storage Account
+var storageAccountName = toLower('${appName}${env}st')
+module storageAccount 'storageAccount.bicep' = {
+  name: 'storageAccount'
+  params: {
+    location: location
+    storageAccountName: storageAccountName
+  }
+}
+
 //Store App Insight connection string in Keyvault
 var appInsightConnectionStringName = 'applicationInsightConnectionString'
 module keyVaulAppInsightConnectionString 'keyVaultSecret.bicep' = {
@@ -63,9 +73,21 @@ module keyVaulAppInsightConnectionString 'keyVaultSecret.bicep' = {
   dependsOn: [
     keyVault
   ]
-
 }
 
+//Store App Insight connection string in Keyvault
+var storageAccountConnectionStringName = 'storageAccountConnectionString'
+module keyVaulStorageAccountConnectionString 'keyVaultSecret.bicep' = {
+  name: appInsightConnectionStringName
+  params: {
+    keyVaultName: keyVaultName
+    secretName: storageAccountConnectionStringName
+    secretValue: storageAccount.outputs.connectionString
+  }
+  dependsOn: [
+    keyVault
+  ]
+}
 
 //Group Alert
 var availabilityTestActionGroupName = 'availabilityTestActionGroup'
@@ -75,16 +97,6 @@ module availabilityTestActionGroup 'actionGroup.bicep' = {
     actionGroupEmail: 'soren@reinke.dk'
     actionGroupName: 'availability test alert'
     actionGroupShortName: 'avail. test'
-  }
-}
-
-//Storage Account
-var storageAccountName = toLower('${appName}${env}st')
-module storageAccount 'storageAccount.bicep' = {
-  name: 'storageAccount'
-  params: {
-    location: location
-    storageAccountName: storageAccountName
   }
 }
 
