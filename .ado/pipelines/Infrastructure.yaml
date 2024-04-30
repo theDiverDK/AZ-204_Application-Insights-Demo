@@ -68,8 +68,11 @@ steps:
   #     scriptPath: '.ado/pipelines/myscript.py'
   #     arguments: '--endpoint $(cosmosDBEndpoint)'
 
-  - script: env
-    displayName: 'Print environment variables'
+  # - script: env
+  #   displayName: 'Print environment variables'
 
-  - script: which python3
-    displayName: 'Locate Python3'
+  # - script: which python3
+  #   displayName: 'Locate Python3'
+
+  - script: /usr/bin/python3 .ado/pipelines/myscript.py
+    displayName: 'Execute Python script'
