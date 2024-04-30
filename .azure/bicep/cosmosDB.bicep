@@ -61,3 +61,4 @@ output cosmosDBMasterKey string = cosmosDBAccount.listKeys().primaryMasterKey
 output cosmosDBName string = cosmosDBAccount.name
 output cosmosDBDatabaseName string = cosmosDBDatabase.name
 output cosmosDBContainerName string = container.name
+output cosmosDBLocation string = location
