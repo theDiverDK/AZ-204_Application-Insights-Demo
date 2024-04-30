@@ -36,3 +36,8 @@ steps:
       overrideParameters:
         -appName $(appName)
         -env $(environment)
+
+  - powershell: |
+      echo "##vso[task.setvariable variable=cosmosDBEndpoint]$(deployCosmosDB.Outputs.cosmosDBEndpoint)"
+      echo "##vso[task.setvariable variable=cosmosDBKey]$(deployCosmosDB.Outputs.cosmosDBKey)"
+
