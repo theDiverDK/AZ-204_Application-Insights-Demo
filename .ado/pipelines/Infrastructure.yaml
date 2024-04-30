@@ -39,8 +39,24 @@ steps:
       deploymentOutputs: infrastructureAsCodeOutputs
 
   - powershell: |
-      # $var=ConvertFrom-Json '$(infrastructureAsCodeOutputs)'
       Write-Host "Value of infrastructureAsCodeOutputs is: $(infrastructureAsCodeOutputs)"
+
+      # Convert JSON-like string to a PowerShell object
+      $object = $(infrastructureAsCodeOutputs) | ConvertFrom-Json
+
+      # Access specific properties
+      $cosmosDBKey = $object.cosmosDBKey.value
+      $cosmosDBContainerName = $object.cosmosDBContainerName.value
+      $cosmosDBDatabaseName = $object.cosmosDBDatabaseName.value
+      $cosmosDBEndpoint = $object.cosmosDBEndpoint.value
+      $cosmosDBLocation = $object.cosmosDBLocation.value
+
+      # Output the values to verify
+      Write-Host "Cosmos DB Key: $cosmosDBKey"
+      Write-Host "Cosmos DB Container Name: $cosmosDBContainerName"
+      Write-Host "Cosmos DB Database Name: $cosmosDBDatabaseName"
+      Write-Host "Cosmos DB Endpoint: $cosmosDBEndpoint"
+      Write-Host "Cosmos DB Location: $cosmosDBLocation"
 
       # $cosmosDBEndpoint=$var.cosmosDBEndpoint.value
 

@@ -112,7 +112,6 @@ output cosmosDBEndpoint string = cosmosDB.outputs.cosmosDBEndpoint
 output cosmosDBKey string = cosmosDB.outputs.cosmosDBMasterKey
 output cosmosDBDatabaseName string = cosmosDB.outputs.cosmosDBDatabaseName
 output cosmosDBContainerName string = cosmosDB.outputs.cosmosDBContainerName
-output cosmosDBLocation string = location
 
 // Setup three Role Assignments on the Storage Account for 
 // the function app's Managed identity
