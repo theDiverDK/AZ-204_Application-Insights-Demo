@@ -69,8 +69,8 @@ steps:
   #     arguments: '--endpoint $(cosmosDBEndpoint)'
   - task: UsePythonVersion@0
     inputs:
-      versionSpec: '3.x' 
-      
+      versionSpec: '3.12' 
+
   - task: PythonScript@0
     inputs:
       scriptSource: 'inline'
