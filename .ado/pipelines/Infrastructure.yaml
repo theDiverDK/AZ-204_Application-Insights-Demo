@@ -39,8 +39,8 @@ steps:
       deploymentOutputs: infrastructureAsCodeOutputs
 
   - powershell: |
-      $var=ConvertFrom-Json '$(infrastructureAsCodeOutputs)'
-      Write-Host "Value of var is: $var"
+      # $var=ConvertFrom-Json '$(infrastructureAsCodeOutputs)'
+      Write-Host "Value of infrastructureAsCodeOutputs is: $(infrastructureAsCodeOutputs)"
 
       # $cosmosDBEndpoint=$var.cosmosDBEndpoint.value
 
