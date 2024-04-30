@@ -42,7 +42,7 @@ steps:
       Write-Host "Value of infrastructureAsCodeOutputs is: $(infrastructureAsCodeOutputs)"
 
       # Convert JSON-like string to a PowerShell object
-      $object = $(infrastructureAsCodeOutputs) | ConvertFrom-Json
+      $object = ConvertFrom-Json '$(infrastructureAsCodeOutputs)'
 
       # Access specific properties
       $cosmosDBKey = $object.cosmosDBKey.value
