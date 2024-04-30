@@ -40,9 +40,10 @@ steps:
 
   - powershell: |
       $var=ConvertFrom-Json '$(infrastructureAsCodeOutputs)'
-      $value=$var.cosmosDBEndpoint.value
-      echo "##vso[task.setvariable variable=cosmosDBEndpoint]$value"
-      Write-Host "Value of myVariable is: $value"
+      $cosmosDBEndpoint=$var.cosmosDBEndpoint.value
+      
+      echo "##vso[task.setvariable variable=cosmosDBEndpoint]$cosmosDBEndpoint"
+      Write-Host "Value of cosmosDBEndpoint is: $(cosmosDBEndpoint)"
 
 
 
