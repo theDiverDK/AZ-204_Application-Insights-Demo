@@ -36,9 +36,12 @@ steps:
       overrideParameters:
         -appName $(appName)
         -env $(environment)
-    name: infrastructureAsCode
+      deploymentOutputs: infrastructureAsCodeOutputs
 
   - powershell: |
-      echo "##vso[task.setvariable variable=cosmosDBEndpoint]$(infrastructureAsCode.Outputs.cosmosDBEndpoint)"
-      echo "##vso[task.setvariable variable=cosmosDBKey]$(infrastructureAsCode.Outputs.cosmosDBKey)"
+      $var=ConvertFrom-Json '$(storageAccountName)'
+      $value=$var.cosmosDBEndpoint.value
+      echo "##vso[task.setvariable variable=cosmosDBEndpoint]$value")"
+        
+
 
