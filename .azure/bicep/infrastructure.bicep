@@ -95,7 +95,7 @@ param location string = resourceGroup().location
 //   }
 // }
 
-var cosmosDBName = '${appName}-${env}-cosmos'
+var cosmosDBName = '${appName}-${env}-cosmosdb'
 module cosmosDB 'cosmosDB.bicep' = {
   name: cosmosDBName
   params: {
