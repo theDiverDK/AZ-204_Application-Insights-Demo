@@ -17,57 +17,62 @@ variables:
 pr: none
 
 steps:
-  - task: AzureCLI@2
-    displayName: Create or update the resource group
-    inputs:
-      azureSubscription: '$(azureServiceConnectionName)'
-      scriptType: pscore
-      scriptLocation: inlineScript
-      inlineScript: |
-        az group create --location $(location) --name $(resourceGroupName)
+  # - task: AzureCLI@2
+  #   displayName: Create or update the resource group
+  #   inputs:
+  #     azureSubscription: '$(azureServiceConnectionName)'
+  #     scriptType: pscore
+  #     scriptLocation: inlineScript
+  #     inlineScript: |
+  #       az group create --location $(location) --name $(resourceGroupName)
 
-  - task: AzureResourceManagerTemplateDeployment@3
-    displayName: 'Deploy all infrastructure'
-    inputs:
-      connectedServiceName: $(azureServiceConnectionName)
-      location: $(location)
-      resourceGroupName: $(resourceGroupName)
-      csmFile: .azure/bicep/infrastructure.bicep
-      overrideParameters: 
-        -appName $(appName)
-        -env $(environment)
-      deploymentOutputs: infrastructureAsCodeOutputs
+  # - task: AzureResourceManagerTemplateDeployment@3
+  #   displayName: 'Deploy all infrastructure'
+  #   inputs:
+  #     connectedServiceName: $(azureServiceConnectionName)
+  #     location: $(location)
+  #     resourceGroupName: $(resourceGroupName)
+  #     csmFile: .azure/bicep/infrastructure.bicep
+  #     overrideParameters: 
+  #       -appName $(appName)
+  #       -env $(environment)
+  #     deploymentOutputs: infrastructureAsCodeOutputs
 
-  - powershell: |
+  # - powershell: |
 
-      # Convert JSON-like string to a PowerShell object
-      $variables = ConvertFrom-Json '$(infrastructureAsCodeOutputs)'
+  #     # Convert JSON-like string to a PowerShell object
+  #     $variables = ConvertFrom-Json '$(infrastructureAsCodeOutputs)'
 
-      # Access specific properties
-      $cosmosDBKey = $variables.cosmosDBKey.value
-      $cosmosDBContainerName = $variables.cosmosDBContainerName.value
-      $cosmosDBDatabaseName = $variables.cosmosDBDatabaseName.value
-      $cosmosDBEndpoint = $variables.cosmosDBEndpoint.value
-      $cosmosDBLocation = $variables.cosmosDBLocation.value
+  #     # Access specific properties
+  #     $cosmosDBKey = $variables.cosmosDBKey.value
+  #     $cosmosDBContainerName = $variables.cosmosDBContainerName.value
+  #     $cosmosDBDatabaseName = $variables.cosmosDBDatabaseName.value
+  #     $cosmosDBEndpoint = $variables.cosmosDBEndpoint.value
+  #     $cosmosDBLocation = $variables.cosmosDBLocation.value
 
-      # Output the values to verify
-      # Write-Host "Cosmos DB Key: $cosmosDBKey"
-      # Write-Host "Cosmos DB Container Name: $cosmosDBContainerName"
-      # Write-Host "Cosmos DB Database Name: $cosmosDBDatabaseName"
-      # Write-Host "Cosmos DB Endpoint: $cosmosDBEndpoint"
-      # Write-Host "Cosmos DB Location: $cosmosDBLocation"
+  #     # Output the values to verify
+  #     # Write-Host "Cosmos DB Key: $cosmosDBKey"
+  #     # Write-Host "Cosmos DB Container Name: $cosmosDBContainerName"
+  #     # Write-Host "Cosmos DB Database Name: $cosmosDBDatabaseName"
+  #     # Write-Host "Cosmos DB Endpoint: $cosmosDBEndpoint"
+  #     # Write-Host "Cosmos DB Location: $cosmosDBLocation"
 
-      # $cosmosDBEndpoint=$var.cosmosDBEndpoint.value
+  #     # $cosmosDBEndpoint=$var.cosmosDBEndpoint.value
 
-      echo "##vso[task.setvariable variable=cosmosDBEndpoint]$cosmosDBEndpoint"
-      Write-Host "Value of cosmosDBEndpoint is: $cosmosDBEndpoint"
+  #     echo "##vso[task.setvariable variable=cosmosDBEndpoint]$cosmosDBEndpoint"
+  #     Write-Host "Value of cosmosDBEndpoint is: $cosmosDBEndpoint"
+
+  # - task: PythonScript@0
+  #   inputs:
+  #     scriptSource: 'filePath'
+  #     scriptPath: '.ado/pipelines/myscript.py'
+  #     arguments: '--endpoint $(cosmosDBEndpoint)'
 
   - task: PythonScript@0
     inputs:
-      scriptSource: 'filePath'
-      scriptPath: '.ado/pipelines/myscript.py'
-      arguments: '--endpoint $(cosmosDBEndpoint)'
-
-        
+      scriptSource: 'inline'
+      script: |
+        print('Hello world 1')
+        print('Hello world 2')        
 
 
