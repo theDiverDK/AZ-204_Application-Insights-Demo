@@ -4,96 +4,96 @@ param appName string
 param env string
 param location string = resourceGroup().location
 
-//Log Analytic Workspace
-var logAnalyticName = '${appName}-${env}-log'
-module workspace 'logAnalytics.bicep' = {
-  name: 'workspace'
-  params: {
-    location: location
-    logAnalyticsName: logAnalyticName
-  }
-}
+// //Log Analytic Workspace
+// var logAnalyticName = '${appName}-${env}-log'
+// module workspace 'logAnalytics.bicep' = {
+//   name: 'workspace'
+//   params: {
+//     location: location
+//     logAnalyticsName: logAnalyticName
+//   }
+// }
 
-//App insight
-var appInsightName = '${appName}-${env}-appi'
-module appInsight 'appInsight.bicep' = {
-  name: 'appInsight'
-  params: {
-    appInsightName: appInsightName
-    location: location
-    workspaceid: workspace.outputs.id
-  }
-}
+// //App insight
+// var appInsightName = '${appName}-${env}-appi'
+// module appInsight 'appInsight.bicep' = {
+//   name: 'appInsight'
+//   params: {
+//     appInsightName: appInsightName
+//     location: location
+//     workspaceid: workspace.outputs.id
+//   }
+// }
 
-//Storage Account
-var storageAccountName = toLower('${appName}${env}st')
-module storageAccount 'storageAccount.bicep' = {
-  name: 'storageAccount'
-  params: {
-    location: location
-    storageAccountName: storageAccountName
-  }
-}
+// //Storage Account
+// var storageAccountName = toLower('${appName}${env}st')
+// module storageAccount 'storageAccount.bicep' = {
+//   name: 'storageAccount'
+//   params: {
+//     location: location
+//     storageAccountName: storageAccountName
+//   }
+// }
 
-//Group Alert
-var availabilityTestActionGroupName = 'availabilityTestActionGroup'
-module availabilityTestActionGroup 'actionGroup.bicep' = {
-  name: availabilityTestActionGroupName
-  params: {
-    actionGroupEmail: 'soren@reinke.dk'
-    actionGroupName: 'availability test alert'
-    actionGroupShortName: 'avail. test'
-  }
-}
+// //Group Alert
+// var availabilityTestActionGroupName = 'availabilityTestActionGroup'
+// module availabilityTestActionGroup 'actionGroup.bicep' = {
+//   name: availabilityTestActionGroupName
+//   params: {
+//     actionGroupEmail: 'soren@reinke.dk'
+//     actionGroupName: 'availability test alert'
+//     actionGroupShortName: 'avail. test'
+//   }
+// }
 
-//Plan
-var planName = '${appName}-${env}-plan'
-module plan 'appServicePlan.bicep' = {
-  name: 'plan'
-  params: {
-    location: location
-    planName: planName
-  }
-}
+// //Plan
+// var planName = '${appName}-${env}-plan'
+// module plan 'appServicePlan.bicep' = {
+//   name: 'plan'
+//   params: {
+//     location: location
+//     planName: planName
+//   }
+// }
 
-//Web App
-var webAppName = '${appName}-${env}-app'
-module webApp 'webApp.bicep' = {
-  name: webAppName
-  params: {
-    appName: webAppName
-    farmId: plan.outputs.id
-    applicationInsightInstrumentationKey: appInsight.outputs.instrumentationKey
-    applicationInsightConnectionString: appInsight.outputs.appInsightConnectionString
-    location: location
-    storageAccountConnectionString: storageAccount.outputs.connectionString
-    storageAccountName: storageAccount.outputs.name
-  }
-}
+// //Web App
+// var webAppName = '${appName}-${env}-app'
+// module webApp 'webApp.bicep' = {
+//   name: webAppName
+//   params: {
+//     appName: webAppName
+//     farmId: plan.outputs.id
+//     applicationInsightInstrumentationKey: appInsight.outputs.instrumentationKey
+//     applicationInsightConnectionString: appInsight.outputs.appInsightConnectionString
+//     location: location
+//     storageAccountConnectionString: storageAccount.outputs.connectionString
+//     storageAccountName: storageAccount.outputs.name
+//   }
+// }
 
-//Availability Test
-var availabilityTestName = 'availabilityTest'
-module availabilityTest 'availabilityTest.bicep' = {
-  name: availabilityTestName
-  params: {
-    availabilityTestName: availabilityTestName
-    applicationInsightId: appInsight.outputs.applicationInsightId
-    location: location
-    availabilityTestUrl: '${webAppName}.azurewebsites.net' //works since we dont use custom domains.
-  }
-}
+// //Availability Test
+// var availabilityTestName = 'availabilityTest'
+// module availabilityTest 'availabilityTest.bicep' = {
+//   name: availabilityTestName
+//   params: {
+//     availabilityTestName: availabilityTestName
+//     applicationInsightId: appInsight.outputs.applicationInsightId
+//     location: location
+//     availabilityTestUrl: '${webAppName}.azurewebsites.net' //works since we dont use custom domains.
+//   }
+// }
 
-//Ping alert rule
-var pingAlertRuleName = 'pingAlert'
-module pingAlertRule 'pingAlertRule.bicep' = {
-  name: pingAlertRuleName
-  params: {
-    actionGroupId: availabilityTestActionGroup.outputs.actionGroupId
-    applicationInsightId: appInsight.outputs.applicationInsightId
-    availabilityTestId: availabilityTest.outputs.availabilityTestId
-    pingAlertRuleName: pingAlertRuleName
-  }
-}
+// //Ping alert rule
+// var pingAlertRuleName = 'pingAlert'
+// module pingAlertRule 'pingAlertRule.bicep' = {
+//   name: pingAlertRuleName
+//   params: {
+//     actionGroupId: availabilityTestActionGroup.outputs.actionGroupId
+//     applicationInsightId: appInsight.outputs.applicationInsightId
+//     availabilityTestId: availabilityTest.outputs.availabilityTestId
+//     pingAlertRuleName: pingAlertRuleName
+//   }
+// }
 
 var cosmosDBName = '${appName}-${env}-cosmos'
 module cosmosDB 'cosmosDB.bicep' = {
