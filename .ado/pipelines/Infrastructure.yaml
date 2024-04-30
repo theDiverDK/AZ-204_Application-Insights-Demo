@@ -62,5 +62,12 @@ steps:
       echo "##vso[task.setvariable variable=cosmosDBEndpoint]$cosmosDBEndpoint"
       Write-Host "Value of cosmosDBEndpoint is: $cosmosDBEndpoint"
 
+  - task: PythonScript@0
+    inputs:
+      scriptSource: 'filePath'
+      scriptPath: '.ado/pipelines/myscript.py'
+      arguments: '--endpoint $(cosmosDBEndpoint)'
+
+        
 
 
