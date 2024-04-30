@@ -67,7 +67,10 @@ steps:
   #     scriptSource: 'filePath'
   #     scriptPath: '.ado/pipelines/myscript.py'
   #     arguments: '--endpoint $(cosmosDBEndpoint)'
-
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.x' 
+      
   - task: PythonScript@0
     inputs:
       scriptSource: 'inline'
