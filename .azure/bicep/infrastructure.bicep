@@ -56,7 +56,6 @@ module plan 'appServicePlan.bicep' = {
   }
 }
 
-
 //Web App
 var webAppName = '${appName}-${env}-app'
 module webApp 'webApp.bicep' = {
@@ -95,6 +94,16 @@ module pingAlertRule 'pingAlertRule.bicep' = {
     pingAlertRuleName: pingAlertRuleName
   }
 }
+
+var cosmosDBName = '${appName}-${env}-cosmos'
+module cosmosDB 'cosmosDB.bicep' = {
+  name: cosmosDBName
+  params: {
+    cosmosDBName: cosmosDBName
+    location: location
+  }
+}
+
 
 // Setup three Role Assignments on the Storage Account for 
 // the function app's Managed identity
