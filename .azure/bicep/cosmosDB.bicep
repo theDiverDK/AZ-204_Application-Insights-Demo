@@ -5,6 +5,7 @@ param defaultConsistencyLevel string = 'Session'
 resource cosmosDBAccount 'Microsoft.DocumentDB/databaseAccounts@2023-11-15' = {
   name: cosmosDBName
   location: location
+  kind: 'GlobalDocumentDB'
   properties: {
     databaseAccountOfferType: 'Standard'
     consistencyPolicy: {
@@ -17,7 +18,11 @@ resource cosmosDBAccount 'Microsoft.DocumentDB/databaseAccounts@2023-11-15' = {
         isZoneRedundant: false
       }
     ]
-    capabilities: []
+    capabilities: [
+      {
+        name: 'EnableServerless'
+      }
+    ]
   }
 }
 
