@@ -1,5 +1,7 @@
 param location string
 param cosmosDBName string 
+param cosmosDBDatabaseName string
+param cosmosDBContainerName string
 param defaultConsistencyLevel string = 'Session'
 
 resource cosmosDBAccount 'Microsoft.DocumentDB/databaseAccounts@2023-11-15' = {
@@ -23,6 +25,34 @@ resource cosmosDBAccount 'Microsoft.DocumentDB/databaseAccounts@2023-11-15' = {
         name: 'EnableServerless'
       }
     ]
+  }
+}
+
+resource cosmosDBDatabase 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2023-11-15' = {
+  parent: cosmosDBAccount
+  name: cosmosDBDatabaseName
+  properties: {
+    resource: {
+      id: cosmosDBDatabaseName
+    }
+    options: {}
+  }
+}
+
+resource container 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2023-11-15' = {
+  name: cosmosDBContainerName
+  parent: cosmosDBDatabase
+  properties: {
+    resource: {
+      id: cosmosDBContainerName
+      partitionKey: {
+        paths: [
+          '/partitionKey'
+        ]
+        kind: 'Hash'
+      }
+    }
+    options: {}
   }
 }
 
