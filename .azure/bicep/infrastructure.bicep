@@ -108,10 +108,10 @@ module cosmosDB 'cosmosDB.bicep' = {
   }
 }
 
-output cosmosEndpoint string = cosmosDB.outputs.cosmosDBEndpoint
-output cosmosKey string = cosmosDB.outputs.cosmosDBMasterKey
-output cosmosDatabaseName string = cosmosDB.outputs.cosmosDBDatabaseName
-output cosmosContainerName string = cosmosDB.outputs.cosmosDBContainerName
+output cosmosDBEndpoint string = cosmosDB.outputs.cosmosDBEndpoint
+output cosmosDBKey string = cosmosDB.outputs.cosmosDBMasterKey
+output cosmosDBDatabaseName string = cosmosDB.outputs.cosmosDBDatabaseName
+output cosmosDBContainerName string = cosmosDB.outputs.cosmosDBContainerName
 
 // Setup three Role Assignments on the Storage Account for 
 // the function app's Managed identity
