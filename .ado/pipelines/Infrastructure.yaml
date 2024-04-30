@@ -67,15 +67,9 @@ steps:
   #     scriptSource: 'filePath'
   #     scriptPath: '.ado/pipelines/myscript.py'
   #     arguments: '--endpoint $(cosmosDBEndpoint)'
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '3.12' 
 
-  - task: PythonScript@0
-    inputs:
-      scriptSource: 'inline'
-      script: |
-        print('Hello world 1')
-        print('Hello world 2')        
+  - script: env
+    displayName: 'Print environment variables'
 
-
+  - script: which python3
+    displayName: 'Locate Python3'
