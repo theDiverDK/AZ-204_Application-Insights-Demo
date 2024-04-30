@@ -39,29 +39,28 @@ steps:
       deploymentOutputs: infrastructureAsCodeOutputs
 
   - powershell: |
-      Write-Host "Value of infrastructureAsCodeOutputs is: $(infrastructureAsCodeOutputs)"
 
       # Convert JSON-like string to a PowerShell object
-      $object = ConvertFrom-Json '$(infrastructureAsCodeOutputs)'
+      $variables = ConvertFrom-Json '$(infrastructureAsCodeOutputs)'
 
       # Access specific properties
-      $cosmosDBKey = $object.cosmosDBKey.value
-      $cosmosDBContainerName = $object.cosmosDBContainerName.value
-      $cosmosDBDatabaseName = $object.cosmosDBDatabaseName.value
-      $cosmosDBEndpoint = $object.cosmosDBEndpoint.value
-      $cosmosDBLocation = $object.cosmosDBLocation.value
+      $cosmosDBKey = $variables.cosmosDBKey.value
+      $cosmosDBContainerName = $variables.cosmosDBContainerName.value
+      $cosmosDBDatabaseName = $variables.cosmosDBDatabaseName.value
+      $cosmosDBEndpoint = $variables.cosmosDBEndpoint.value
+      $cosmosDBLocation = $variables.cosmosDBLocation.value
 
       # Output the values to verify
-      Write-Host "Cosmos DB Key: $cosmosDBKey"
-      Write-Host "Cosmos DB Container Name: $cosmosDBContainerName"
-      Write-Host "Cosmos DB Database Name: $cosmosDBDatabaseName"
-      Write-Host "Cosmos DB Endpoint: $cosmosDBEndpoint"
-      Write-Host "Cosmos DB Location: $cosmosDBLocation"
+      # Write-Host "Cosmos DB Key: $cosmosDBKey"
+      # Write-Host "Cosmos DB Container Name: $cosmosDBContainerName"
+      # Write-Host "Cosmos DB Database Name: $cosmosDBDatabaseName"
+      # Write-Host "Cosmos DB Endpoint: $cosmosDBEndpoint"
+      # Write-Host "Cosmos DB Location: $cosmosDBLocation"
 
       # $cosmosDBEndpoint=$var.cosmosDBEndpoint.value
 
-      # echo "##vso[task.setvariable variable=cosmosDBEndpoint]$cosmosDBEndpoint"
-      # Write-Host "Value of cosmosDBEndpoint is: $cosmosDBEndpoint"
+      echo "##vso[task.setvariable variable=cosmosDBEndpoint]$cosmosDBEndpoint"
+      Write-Host "Value of cosmosDBEndpoint is: $cosmosDBEndpoint"
 
 
 
