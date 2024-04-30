@@ -33,7 +33,7 @@ steps:
       location: $(location)
       resourceGroupName: $(resourceGroupName)
       csmFile: .azure/bicep/infrastructure.bicep
-      overrideParameters: |
+      overrideParameters: 
         -appName $(appName)
         -env $(environment)
       deploymentOutputs: infrastructureAsCodeOutputs
