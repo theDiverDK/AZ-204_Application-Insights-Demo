@@ -104,6 +104,24 @@ module cosmosDB 'cosmosDB.bicep' = {
   }
 }
 
+var cosmosDBDatabaseName = '${appName}-${env}-database'
+module cosmosDBDatabase 'cosmosDBDatabase.bicep' = {
+  name: cosmosDBDatabaseName
+  params: {
+    cosmosDBName: cosmosDB.outputs.cosmosDBName
+    cosmosDBDatabaseName: cosmosDBDatabaseName
+  }
+}
+
+var cosmosDBContainerName = '${appName}-${env}-container'
+module cosmosDBContainer 'cosmosDBContainer.bicep' = {
+  name: cosmosDBContainerName
+  params: {
+    cosmosDBContainerName: cosmosDBContainerName
+    cosmosDBName: cosmosDB.outputs.cosmosDBName
+  }
+}
+
 
 // Setup three Role Assignments on the Storage Account for 
 // the function app's Managed identity

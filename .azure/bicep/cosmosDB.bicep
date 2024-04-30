@@ -27,4 +27,4 @@ resource cosmosDBAccount 'Microsoft.DocumentDB/databaseAccounts@2023-11-15' = {
 }
 
 output cosmosDBEndpoint string = cosmosDBAccount.properties.documentEndpoint
-
+output cosmosDBName string = cosmosDBAccount.name
