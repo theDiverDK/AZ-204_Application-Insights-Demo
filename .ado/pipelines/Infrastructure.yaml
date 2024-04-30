@@ -39,9 +39,9 @@ steps:
       deploymentOutputs: infrastructureAsCodeOutputs
 
   - powershell: |
-      $var=ConvertFrom-Json '$(storageAccountName)'
+      $var=ConvertFrom-Json '$(infrastructureAsCodeOutputs)'
       $value=$var.cosmosDBEndpoint.value
-      echo "##vso[task.setvariable variable=cosmosDBEndpoint]$value")"
-        
+      echo "##vso[task.setvariable variable=cosmosDBEndpoint]$value"
+
 
 
