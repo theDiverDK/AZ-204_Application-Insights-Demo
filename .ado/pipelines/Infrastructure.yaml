@@ -44,10 +44,11 @@ steps:
       $variables = ConvertFrom-Json '$(infrastructureAsCodeOutputs)'
 
       # Access specific properties
+      $cosmosDBEndpoint = $variables.cosmosDBEndpoint.value
       $cosmosDBKey = $variables.cosmosDBKey.value
       $cosmosDBContainerName = $variables.cosmosDBContainerName.value
       $cosmosDBDatabaseName = $variables.cosmosDBDatabaseName.value
-      $cosmosDBEndpoint = $variables.cosmosDBEndpoint.value
+
 
       # Output the values to verify
       # Write-Host "Cosmos DB Key: $cosmosDBKey"
@@ -70,5 +71,5 @@ steps:
   - script: /usr/bin/pip install -r .ado/pipelines/requirements.txt
     displayName: 'Install Python dependencies'
 
-  - script: /usr/bin/python3 .ado/pipelines/myscript.py --endpoint $(cosmosDBEndpoint) --key $(cosmosDBKey) --database $(cosmosDBDatabaseName) --container $(cosmosDBContainerName)
+  - script: /usr/bin/python3 .ado/pipelines/myscript.py --endpoint $cosmosDBEndpoint --key $cosmosDBKey --database $cosmosDBDatabaseName --container $cosmosDBContainerName
     displayName: 'Execute Python script'
