@@ -48,7 +48,6 @@ steps:
       $cosmosDBContainerName = $variables.cosmosDBContainerName.value
       $cosmosDBDatabaseName = $variables.cosmosDBDatabaseName.value
       $cosmosDBEndpoint = $variables.cosmosDBEndpoint.value
-      $cosmosDBLocation = $variables.cosmosDBLocation.value
 
       # Output the values to verify
       # Write-Host "Cosmos DB Key: $cosmosDBKey"
@@ -68,6 +67,6 @@ steps:
   # - script: which python3
   #   displayName: 'Locate Python3'
 
-  - script: /usr/bin/python3 .ado/pipelines/myscript.py --endpoint $(cosmosDBEndpoint)
+  - script: /usr/bin/python3 .ado/pipelines/myscript.py --endpoint $(cosmosDBEndpoint) --key $(cosmosDBKey) --database $(cosmosDBDatabaseName) --container $(cosmosDBContainerName)
 
     displayName: 'Execute Python script'
