@@ -1,6 +1,5 @@
 import argparse
 
-#--endpoint $(cosmosDBEndpoint) --key $(cosmosDBKey) --database $(cosmosDBDatabaseName) --container $(cosmosDBContainerName)
 parser = argparse.ArgumentParser(description='Process some integers.')
 parser.add_argument('--endpoint', type=str, help='Cosmos DB endpoint')
 parser.add_argument('--key', type=str, help='Cosmos DB key')

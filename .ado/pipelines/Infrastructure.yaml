@@ -8,8 +8,8 @@ trigger: none
 #      - .azure/*
 
 pool:
-  name: 'Minecraft server'
-  vmImage: 'ubuntu-latest'
+  name: 'Azure Pipelines'
+  # vmImage: 'ubuntu-latest'
 
 variables:
   - group: 'Production Variables'
