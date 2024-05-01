@@ -59,10 +59,10 @@ steps:
 
       # $cosmosDBEndpoint=$var.cosmosDBEndpoint.value
 
-      # echo "##vso[task.setvariable variable=cosmosDBEndpoint]$cosmosDBEndpoint"
-      # echo "##vso[task.setvariable variable=cosmosDBKey]$cosmosDBKey"
-      # echo "##vso[task.setvariable variable=cosmosDBContainerName]$cosmosDBContainerName"
-      # echo "##vso[task.setvariable variable=cosmosDBDatabaseName]$cosmosDBDatabaseName"
+      echo "##vso[task.setvariable variable=cosmosDBEndpoint]$cosmosDBEndpoint"
+      echo "##vso[task.setvariable variable=cosmosDBKey]$cosmosDBKey"
+      echo "##vso[task.setvariable variable=cosmosDBContainerName]$cosmosDBContainerName"
+      echo "##vso[task.setvariable variable=cosmosDBDatabaseName]$cosmosDBDatabaseName"
 #      Write-Host "Value of cosmosDBEndpoint is: $cosmosDBEndpoint"
 
   # - script: env
