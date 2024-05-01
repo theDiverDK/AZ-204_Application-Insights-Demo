@@ -74,5 +74,5 @@ steps:
   - script: /usr/bin/pip3 install -r .ado/pipelines/python/requirements.txt
     displayName: 'Install Python dependencies'
 
-  - script: /usr/bin/python3 .ado/pipelines/python/seed.py --endpoint $(cosmosDBEndpoint) --key $(cosmosDBKey) --database $(cosmosDBDatabaseName) --container $(cosmosDBContainerName)
+  - script: /usr/bin/python3 .ado/pipelines/python/seed.py --endpoint $(cosmosDBEndpoint) --key $(cosmosDBKey) --database $(cosmosDBDatabaseName) --container $(cosmosDBContainerName) --configdata .ado/pipelines/python/ConfigData/
     displayName: 'Execute Python script'

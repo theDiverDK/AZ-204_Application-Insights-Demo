@@ -10,12 +10,14 @@ parser.add_argument('--endpoint', type=str, help='Cosmos DB endpoint')
 parser.add_argument('--key', type=str, help='Cosmos DB key')
 parser.add_argument('--database', type=str, help='Cosmos DB database name')
 parser.add_argument('--container', type=str, help='Cosmos DB container name')
+parser.add_argument('--configdata', type=str, help='ConfigData folder path')
 
 args = parser.parse_args()
 HOST = args.endpoint
 MASTER_KEY = args.key
 DATABASE_ID = args.database
 CONTAINER_ID = args.container
+CONFIG_DATA_DIR = args.configdata
  
 def upsert_config_item(container, config_doc):
     """Upserts config item to the appropriate container"""
@@ -57,7 +59,7 @@ def process_config_docs():
         # setup database for this sample
         db = get_cosmos_database(client)
 
-        config_data_dir = os.scandir('ConfigData')
+        config_data_dir = os.scandir(CONFIG_DATA_DIR)
 
         for entry in config_data_dir:
             if entry.is_dir():
