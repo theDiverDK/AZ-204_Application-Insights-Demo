@@ -67,6 +67,8 @@ steps:
   # - script: which python3
   #   displayName: 'Locate Python3'
 
-  - script: /usr/bin/python3 .ado/pipelines/myscript.py --endpoint $(cosmosDBEndpoint) --key $(cosmosDBKey) --database $(cosmosDBDatabaseName) --container $(cosmosDBContainerName)
+  - script: /usr/bin/pip install -r .ado/pipelines/requirements.txt
+    displayName: 'Install Python dependencies'
 
+  - script: /usr/bin/python3 .ado/pipelines/myscript.py --endpoint $(cosmosDBEndpoint) --key $(cosmosDBKey) --database $(cosmosDBDatabaseName) --container $(cosmosDBContainerName)
     displayName: 'Execute Python script'
