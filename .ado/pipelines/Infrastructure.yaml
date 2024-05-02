@@ -138,3 +138,12 @@ stages:
               appType: ${{ variables.webAppType }}
               appName: $(appName)-$(environment)-app
               package: '$(Pipeline.workspace)/$(appName)-$(environment)-app/${{ variables.webAppName }}.zip'  
+
+          - template: DeployWebApp.yaml
+            parameters:
+              webAppName: $(webAppName)
+              Environment: $(environment)
+              AppServiceName: $(appName)-$(environment)-app
+              AppType: webApp
+              ServiceConnection: $(azureServiceConnectionName)
+                        
