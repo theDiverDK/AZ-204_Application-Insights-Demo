@@ -9,8 +9,8 @@ parser.add_argument('--configdata', type=str, help='ConfigData folder path')
 args = parser.parse_args()
 CONNECTION_STRING = args.connectionstring
 CONFIG_DATA_DIR = args.configdata
-print ("CONNECTION_STRING: {0}".format(CONNECTION_STRING))
-print ("CONFIG_DATA_DIR: {0}".format(CONFIG_DATA_DIR))
+print("CONNECTION_STRING: {0}".format(CONNECTION_STRING))
+print("CONFIG_DATA_DIR: {0}".format(CONFIG_DATA_DIR))
 
 def upload_blob(container_client, blob_name, data):
     """Uploads a blob to the appropriate container"""
