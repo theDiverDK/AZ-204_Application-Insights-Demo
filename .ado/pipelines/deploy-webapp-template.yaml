@@ -16,6 +16,7 @@ parameters:
 
 steps:
   - task: AzureWebApp@1
+    displayName: 'Deploy Azure Web App'
     inputs:
       azureSubscription: ${{ parameters.ServiceConnection }}
       appType: ${{ parameters.AppType }}

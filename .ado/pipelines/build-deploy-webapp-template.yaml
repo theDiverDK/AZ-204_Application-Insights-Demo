@@ -41,6 +41,6 @@ steps:
     parameters:
       webAppName: $(webAppName)
       Environment: $(environment)
-      AppServiceName: $(appName)-$(environment)-app
+      AppServiceName: $(AppServiceName)
       AppType: webApp
       ServiceConnection: $(azureServiceConnectionName)
