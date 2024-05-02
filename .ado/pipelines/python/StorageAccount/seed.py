@@ -9,16 +9,14 @@ parser.add_argument('--configdata', type=str, help='ConfigData folder path')
 args = parser.parse_args()
 CONNECTION_STRING = args.connectionstring
 CONFIG_DATA_DIR = args.configdata
-print("CONNECTION_STRING: {0}".format(CONNECTION_STRING))
-print("CONFIG_DATA_DIR: {0}".format(CONFIG_DATA_DIR))
+print(f"CONNECTION_STRING: '{CONNECTION_STRING}'")
+print(f"CONFIG_DATA_DIR: '{CONFIG_DATA_DIR}'")
 
 def upload_blob(container_client, blob_name, data):
-    """Uploads a blob to the appropriate container"""
     blob_client = container_client.get_blob_client(blob_name)
     blob_client.upload_blob(data, overwrite=True)
 
 def get_container_client(container_name):
-    """Gets a container client to connect to the blob container"""
     blob_service_client = BlobServiceClient.from_connection_string(CONNECTION_STRING)
     container_client = blob_service_client.get_container_client(container_name)
 
