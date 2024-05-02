@@ -106,7 +106,7 @@ stages:
             displayName: 'Restore Nuget Packages'
             inputs:
               command: 'restore'
-              projects: $(System.DefaultWorkingDirectory)/src/WebApps/$(webAppName)/*.csproj
+              projects: $(System.DefaultWorkingDirectory)/src/WebApps/**/*.csproj
               feedsToUse: 'select'
   
           # - task: DotNetCoreCLI@2
