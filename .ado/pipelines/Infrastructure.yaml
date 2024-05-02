@@ -50,15 +50,14 @@ steps:
       echo "##vso[task.setvariable variable=cosmosDBPartitionKey]$variables.cosmosDBPartitionKey.value"
       echo "##vso[task.setvariable variable=storageAccountConnectiongString]$variables.storageAccountConnectiongString.value"
 
-      - script: /usr/bin/pip3 install -r .ado/pipelines/python/CosmosDB/requirements.txt
-        displayName: 'Install Python dependencies for CosmosDB seeding script'
-  
-      - script: /usr/bin/python3 .ado/pipelines/python/CosmosDB/seed.py --endpoint $(cosmosDBEndpoint) --key $(cosmosDBKey) --database $(cosmosDBDatabaseName) --container $(cosmosDBContainerName) --configdata .ado/pipelines/python/CosmosDB/ConfigData/
-        displayName: 'Execute Python script for StorageAccount seeding'
+  - script: /usr/bin/pip3 install -r .ado/pipelines/python/CosmosDB/requirements.txt
+    displayName: 'Install Python dependencies for CosmosDB seeding script'
 
-      - script: /usr/bin/pip3 install -r .ado/pipelines/python/StorageAccount/requirements.txt
-        displayName: 'Install Python dependencies for StorageAccount seeding script'
-    
-      - script: /usr/bin/python3 .ado/pipelines/python/StorageAccount/seed.py --connectionString $(storageAccountConnectiongString) --configdata .ado/pipelines/python/StorageAccount/ConfigData/
-        displayName: 'Execute Python script for StorageAccount seeding'
-    
+  - script: /usr/bin/python3 .ado/pipelines/python/CosmosDB/seed.py --endpoint $(cosmosDBEndpoint) --key $(cosmosDBKey) --database $(cosmosDBDatabaseName) --container $(cosmosDBContainerName) --configdata .ado/pipelines/python/CosmosDB/ConfigData/
+    displayName: 'Execute Python script for StorageAccount seeding'
+
+  - script: /usr/bin/pip3 install -r .ado/pipelines/python/StorageAccount/requirements.txt
+    displayName: 'Install Python dependencies for StorageAccount seeding script'
+
+  - script: /usr/bin/python3 .ado/pipelines/python/StorageAccount/seed.py --connectionString $(storageAccountConnectiongString) --configdata .ado/pipelines/python/StorageAccount/ConfigData/
+    displayName: 'Execute Python script for StorageAccount seeding'
