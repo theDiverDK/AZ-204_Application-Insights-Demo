@@ -121,7 +121,7 @@ stages:
             displayName: 'Build and Publish'
             inputs:
               command: 'publish'
-              projects: $(System.DefaultWorkingDirectory)/src/WebApps/$(webAppName)/*.csproj
+              projects: $(System.DefaultWorkingDirectory)/src/WebApps/**/*.csproj
               publishWebProjects: false
               arguments: "-o $(Build.ArtifactStagingDirectory) --configuration Release"
     
