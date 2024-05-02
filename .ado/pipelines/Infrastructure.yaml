@@ -123,6 +123,6 @@ stages:
             parameters:
               webAppName: $(webAppName)
               Environment: $(environment)
-              AppServiceName: appinsight-${environment}-app
+              AppServiceName: appinsight-$(environment)-app
               AppType: webApp
               ServiceConnection: $(azureServiceConnectionName)
