@@ -132,13 +132,6 @@ stages:
               artifact: $(appName)-$(environment)-app
               publishLocation: "pipeline"
 
-          - task: AzureWebApp@1
-            inputs:
-              azureSubscription: $(azureServiceConnectionName)
-              appType: ${{ variables.webAppType }}
-              appName: $(appName)-$(environment)-app
-              package: '$(Pipeline.workspace)/$(appName)-$(environment)-app/${{ variables.webAppName }}.zip'  
-
           - template: DeployWebApp.yaml
             parameters:
               webAppName: $(webAppName)
