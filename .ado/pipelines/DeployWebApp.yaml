@@ -14,22 +14,13 @@ parameters:
   - name: ServiceConnection
     type: string
 
-stages: 
-  - stage: Deployment
-    jobs:
-      - deployment:
-        displayName: Deployment of web app
-        environment: ${{ parameters.Environment }}
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - script: echo ${{ parameters.AppServiceName }}
+steps:
+  - script: echo ${{ parameters.AppServiceName }}
 
-                - task: AzureWebApp@1
-                  inputs:
-                    azureSubscription: ${{ parameters.ServiceConnection }}
-                    appType: ${{ parameters.AppType }}
-                    appName: ${{ parameters.AppServiceName }}
-                    package: '$(Pipeline.workspace)/${{ parameters.AppServiceName }}/${{ parameters.WebAppName }}.zip'
-  
+  - task: AzureWebApp@1
+    inputs:
+      azureSubscription: ${{ parameters.ServiceConnection }}
+      appType: ${{ parameters.AppType }}
+      appName: ${{ parameters.AppServiceName }}
+      package: '$(Pipeline.workspace)/${{ parameters.AppServiceName }}/${{ parameters.WebAppName }}.zip'
+
