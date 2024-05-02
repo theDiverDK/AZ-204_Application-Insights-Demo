@@ -17,11 +17,11 @@ variables:
 pr: none
 
 stages:
-  - stage: Deploy_Infrastructure
+  - stage: Deploy_Infrastructure_stage
     displayName: 'Deploy Infrastructure'
 
     jobs:
-      - job: Deploy_Infrastructure
+      - job: Deploy_Infrastructure_jobs
 
         steps:
           - task: AzureCLI@2
@@ -46,7 +46,6 @@ stages:
               deploymentOutputs: infrastructureAsCodeOutputs
 
           - powershell: |
-
               # Convert JSON-like string to a PowerShell object
               $variables = ConvertFrom-Json '$(infrastructureAsCodeOutputs)'
 
@@ -68,7 +67,7 @@ stages:
     displayName: 'Seed CosmosDB and StorageAccount'
     dependsOn: 'Deploy_Infrastructure'
     variables:
-      cosmosDBEndpoint: $[ stageDependencies.Deploy_Infrastructure.Deploy_Infrastructure.outputs['cosmosDBEndpoint'] ]
+      cosmosDBEndpoint: $[ stageDependencies.Deploy_Infrastructure_stage.Deploy_Infrastructure_jobs.outputs['powershell.cosmosDBEndpoint'] ]
 
     jobs:
       - job:
