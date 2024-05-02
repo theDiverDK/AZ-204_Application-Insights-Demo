@@ -137,4 +137,4 @@ stages:
               azureSubscription: $(azureServiceConnectionName)
               appType: $webAppType
               appName: $(appName)-$(environment)-app
-              package: '$(Pipeline.workspace)/$AppServiceName/$weAppName.zip'  
+              package: '$(Pipeline.workspace)/$(appName)-$(environment)-app/$webAppName.zip'  
