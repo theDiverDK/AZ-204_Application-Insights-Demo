@@ -135,6 +135,6 @@ stages:
           - task: AzureWebApp@1
             inputs:
               azureSubscription: $(azureServiceConnectionName)
-              appType: $webAppType
+              appType: ${{ variables.webAppType }}
               appName: $(appName)-$(environment)-app
-              package: '$(Pipeline.workspace)/$(appName)-$(environment)-app/$webAppName.zip'  
+              package: '$(Pipeline.workspace)/$(appName)-$(environment)-app/${{ variables.webAppName }}.zip'  
