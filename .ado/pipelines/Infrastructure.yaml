@@ -13,6 +13,8 @@ pool:
 
 variables:
   - group: 'Production Variables'
+  - name: webAppName
+    value: WebApplication1
 
 pr: none
 
