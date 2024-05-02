@@ -14,13 +14,6 @@ pool:
 variables:
   - group: 'Production Variables'
 
-  - name: webAppName
-    value: WebApplication1
-
-  - name: webAppType
-    value: webApp
-
-
 pr: none
 
 stages:
@@ -97,8 +90,14 @@ stages:
   #           displayName: 'Execute Python script for StorageAccount seeding'
   
   - stage: 
-    displayName: 'Build WebApp'
+    displayName: 'Build WebApps/WebApplication1'
     # dependsOn: 'Deploy_Infrastructure_stage'
+
+    variables:
+      webAppName: WebApplication1
+      appName: WebApp
+      environment: test
+
     jobs:
       - job:
         steps:
@@ -106,7 +105,7 @@ stages:
             displayName: 'Restore Nuget Packages'
             inputs:
               command: 'restore'
-              projects: $(System.DefaultWorkingDirectory)/src/WebApps/**/*.csproj
+              projects: $(System.DefaultWorkingDirectory)/src/WebApps/$(webAppName)/*.csproj
               feedsToUse: 'select'
   
           # - task: DotNetCoreCLI@2
@@ -121,7 +120,7 @@ stages:
             displayName: 'Build and Publish'
             inputs:
               command: 'publish'
-              projects: $(System.DefaultWorkingDirectory)/src/WebApps/**/*.csproj
+              projects: $(System.DefaultWorkingDirectory)/src/WebApps/$(webAppName)/*.csproj
               publishWebProjects: false
               arguments: "-o $(Build.ArtifactStagingDirectory) --configuration Release"
     
