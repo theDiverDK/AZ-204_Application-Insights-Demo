@@ -17,11 +17,11 @@ variables:
 pr: none
 
 stages:
-  - stage:
+  - stage: Deploy_Infrastructure
     displayName: 'Deploy Infrastructure'
 
     jobs:
-      - job:
+      - job: Deploy_Infrastructure
 
         steps:
           - task: AzureCLI@2
@@ -66,6 +66,9 @@ stages:
 
   - stage:
     displayName: 'Seed CosmosDB and StorageAccount'
+    dependsOn: 'Deploy Infrastructure'
+    variables:
+      cosmosDBEndpoint: $[ stageDependencies.Deploy_Infrastructure.Deploy_Infrastructure.outputs['cosmosDBEndpoint'] ]
 
     jobs:
       - job:
