@@ -108,14 +108,6 @@ stages:
               projects: $(System.DefaultWorkingDirectory)/src/WebApps/$(webAppName)/*.csproj
               feedsToUse: 'select'
   
-          # - task: DotNetCoreCLI@2
-          #   displayName: 'Unit tests'
-          #   inputs:
-          #     command: 'test'
-          #     projects: $(System.DefaultWorkingDirectory)/src/WebApps/$(webAppName)-Tests/*.csproj
-          #     publishTestResults: true
-          #     arguments: '--configuration Release /p:CollectCoverage=true' # /p:CoverletOutputFormat=cobertura
-          
           - task: DotNetCoreCLI@2
             displayName: 'Build and Publish'
             inputs:
@@ -131,11 +123,11 @@ stages:
               artifact: $(appName)-$(environment)-app
               publishLocation: "pipeline"
 
-  # - template: DeployWebApp.yaml
-  #   parameters:
-  #     webAppName: $(webAppName)
-  #     Environment: $(environment)
-  #     AppServiceName: $(appName)-$(environment)-app
-  #     AppType: webApp
-  #     ServiceConnection: $(azureServiceConnectionName)
+  - template: DeployWebApp.yaml
+    parameters:
+      webAppName: $(webAppName)
+      Environment: $(environment)
+      AppServiceName: $(appName)-$(environment)-app
+      AppType: webApp
+      ServiceConnection: $(azureServiceConnectionName)
                 
