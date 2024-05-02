@@ -95,7 +95,6 @@ stages:
 
     variables:
       webAppName: WebApplication1
-      appName: WebApp
       environment: test
 
     jobs:
