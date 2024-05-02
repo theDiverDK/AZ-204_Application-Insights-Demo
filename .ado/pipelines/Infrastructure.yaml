@@ -45,12 +45,6 @@ stages:
                 -env $(environment)
               deploymentOutputs: infrastructureAsCodeOutputs
 
-  - stage:
-    displayName: 'Seed CosmosDB and StorageAccount'
-
-    jobs:
-      - job:
-        steps:
           - powershell: |
 
               # Convert JSON-like string to a PowerShell object
@@ -70,6 +64,12 @@ stages:
 
               echo "##vso[task.setvariable variable=storageAccountConnectionString]$storageAccountConnectionString"
 
+  - stage:
+    displayName: 'Seed CosmosDB and StorageAccount'
+
+    jobs:
+      - job:
+        steps:
           - script: /usr/bin/pip3 install -r .ado/pipelines/python/CosmosDB/requirements.txt
             displayName: 'Install Python dependencies for CosmosDB seeding script'
 
