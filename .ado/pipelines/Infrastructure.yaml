@@ -90,7 +90,7 @@ stages:
             displayName: 'Execute Python script for StorageAccount seeding'
   
   - stage: 
-    displayName: 'Build WebApps/WebApplication1'
+    displayName: 'Build/Depoy WebApplication1 webapp'
     # dependsOn: 'Deploy_Infrastructure_stage'
 
     variables:
@@ -109,7 +109,7 @@ stages:
               ServiceConnection: $(azureServiceConnectionName)
 
   - stage: 
-    displayName: 'Build WebApps/Application_Insight'
+    displayName: 'Build/Deploy Application_Insight webapp'
     # dependsOn: 'Deploy_Infrastructure_stage'
 
     variables:
@@ -123,6 +123,6 @@ stages:
             parameters:
               webAppName: $(webAppName)
               Environment: $(environment)
-              AppServiceName: $(appName)-$(environment)-app
+              AppServiceName: appinsight-${environment}-app
               AppType: webApp
               ServiceConnection: $(azureServiceConnectionName)
