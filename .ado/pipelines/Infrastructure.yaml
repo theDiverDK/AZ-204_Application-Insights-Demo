@@ -97,7 +97,7 @@ stages:
   #           displayName: 'Execute Python script for StorageAccount seeding'
   
   - stage: 
-    displayName: 'Build and deploy WebApp'
+    displayName: 'Build WebApp'
     # dependsOn: 'Deploy_Infrastructure_stage'
     jobs:
       - job:
@@ -132,11 +132,11 @@ stages:
               artifact: $(appName)-$(environment)-app
               publishLocation: "pipeline"
 
-  - template: DeployWebApp.yaml
-    parameters:
-      webAppName: $(webAppName)
-      Environment: $(environment)
-      AppServiceName: $(appName)-$(environment)-app
-      AppType: webApp
-      ServiceConnection: $(azureServiceConnectionName)
+  # - template: DeployWebApp.yaml
+  #   parameters:
+  #     webAppName: $(webAppName)
+  #     Environment: $(environment)
+  #     AppServiceName: $(appName)-$(environment)-app
+  #     AppType: webApp
+  #     ServiceConnection: $(azureServiceConnectionName)
                 

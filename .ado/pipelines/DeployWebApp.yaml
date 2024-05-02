@@ -18,7 +18,7 @@ stages:
   - stage: Deployment
     jobs:
       - deployment:
-        displayName: Deployment
+        displayName: Deployment of web app
         environment: ${{ parameters.Environment }}
         strategy:
           runOnce:
@@ -33,14 +33,3 @@ stages:
                     appName: ${{ parameters.AppServiceName }}
                     package: '$(Pipeline.workspace)/${{ parameters.AppServiceName }}/${{ parameters.WebAppName }}.zip'
   
-  # - stage: Production
-  #   jobs:
-  #     - deployment: prod_deploy
-  #       displayName: Production Deploymenty
-  #       environment: Production
-  #       strategy:
-  #         runOnce:
-  #           deploy:
-  #             steps:
-  #               - bash: |
-  #                   echo "Hej med dig, Production deployment"
