@@ -65,7 +65,7 @@ stages:
 
   - stage:
     displayName: 'Seed CosmosDB and StorageAccount'
-    dependsOn: 'Deploy_Infrastructure'
+    dependsOn: 'Deploy_Infrastructure_stage'
     variables:
       cosmosDBEndpoint: $[ stageDependencies.Deploy_Infrastructure_stage.Deploy_Infrastructure_jobs.outputs['powershell.cosmosDBEndpoint'] ]
 
