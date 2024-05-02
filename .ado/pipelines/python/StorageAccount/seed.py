@@ -4,12 +4,12 @@ import os
 import json
 
 parser = argparse.ArgumentParser(description='Process some integers.')
-parser.add_argument('--connectionString', type=str, help='Azure Blob Storage connection string')
-parser.add_argument('--configData', type=str, help='ConfigData folder path')
+parser.add_argument('--connectionstring', type=str, help='Azure Blob Storage connection string')
+parser.add_argument('--configdata', type=str, help='ConfigData folder path')
 
 args = parser.parse_args()
-CONNECTION_STRING = args.connectionString
-CONFIG_DATA_DIR = args.configData
+CONNECTION_STRING = args.connectionstring
+CONFIG_DATA_DIR = args.configdata
 
 def upload_blob(container_client, blob_name, data):
     """Uploads a blob to the appropriate container"""
