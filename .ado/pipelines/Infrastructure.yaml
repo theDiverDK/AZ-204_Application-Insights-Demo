@@ -100,33 +100,41 @@ stages:
     jobs:
       - job:
         steps:
-          - task: DotNetCoreCLI@2
-            displayName: 'Restore Nuget Packages'
-            inputs:
-              command: 'restore'
-              projects: $(System.DefaultWorkingDirectory)/src/WebApps/$(webAppName)/*.csproj
-              feedsToUse: 'select'
-  
-          - task: DotNetCoreCLI@2
-            displayName: 'Build and Publish'
-            inputs:
-              command: 'publish'
-              projects: $(System.DefaultWorkingDirectory)/src/WebApps/$(webAppName)/*.csproj
-              publishWebProjects: false
-              arguments: "-o $(Build.ArtifactStagingDirectory) --configuration Release"
-    
-          - task: PublishPipelineArtifact@1 
-            displayName: 'Publish artifact'
-            inputs: 
-              targetPath: "$(Build.ArtifactStagingDirectory)"
-              artifact: $(appName)-$(environment)-app
-              publishLocation: "pipeline"
-
-          - template: DeployWebApp.yaml
+          - template: deploy-webapp-template.yml
             parameters:
               webAppName: $(webAppName)
               Environment: $(environment)
               AppServiceName: $(appName)-$(environment)-app
               AppType: webApp
               ServiceConnection: $(azureServiceConnectionName)
+
+              # - task: DotNetCoreCLI@2
+          #   displayName: 'Restore Nuget Packages'
+          #   inputs:
+          #     command: 'restore'
+          #     projects: $(System.DefaultWorkingDirectory)/src/WebApps/$(webAppName)/*.csproj
+          #     feedsToUse: 'select'
+  
+          # - task: DotNetCoreCLI@2
+          #   displayName: 'Build and Publish'
+          #   inputs:
+          #     command: 'publish'
+          #     projects: $(System.DefaultWorkingDirectory)/src/WebApps/$(webAppName)/*.csproj
+          #     publishWebProjects: false
+          #     arguments: "-o $(Build.ArtifactStagingDirectory) --configuration Release"
+    
+          # - task: PublishPipelineArtifact@1 
+          #   displayName: 'Publish artifact'
+          #   inputs: 
+          #     targetPath: "$(Build.ArtifactStagingDirectory)"
+          #     artifact: $(appName)-$(environment)-app
+          #     publishLocation: "pipeline"
+
+          # - template: DeployWebApp.yaml
+          #   parameters:
+          #     webAppName: $(webAppName)
+          #     Environment: $(environment)
+          #     AppServiceName: $(appName)-$(environment)-app
+          #     AppType: webApp
+          #     ServiceConnection: $(azureServiceConnectionName)
            
