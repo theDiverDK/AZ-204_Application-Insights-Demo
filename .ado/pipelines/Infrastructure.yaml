@@ -43,36 +43,22 @@ steps:
       # Convert JSON-like string to a PowerShell object
       $variables = ConvertFrom-Json '$(infrastructureAsCodeOutputs)'
 
-      # Access specific properties
-      $cosmosDBEndpoint = $variables.cosmosDBEndpoint.value
-      $cosmosDBKey = $variables.cosmosDBKey.value
-      $cosmosDBContainerName = $variables.cosmosDBContainerName.value
-      $cosmosDBDatabaseName = $variables.cosmosDBDatabaseName.value
+      echo "##vso[task.setvariable variable=cosmosDBEndpoint]$variables.cosmosDBEndpoint.value"
+      echo "##vso[task.setvariable variable=cosmosDBKey]$variables.cosmosDBKey.value"
+      echo "##vso[task.setvariable variable=cosmosDBContainerName]$variables.cosmosDBContainerName.value"
+      echo "##vso[task.setvariable variable=cosmosDBDatabaseName]$variables.cosmosDBDatabaseName.value"
+      echo "##vso[task.setvariable variable=cosmosDBPartitionKey]$variables.cosmosDBPartitionKey.value"
+      echo "##vso[task.setvariable variable=storageAccountConnectiongString]$variables.storageAccountConnectiongString.value"
 
+      - script: /usr/bin/pip3 install -r .ado/pipelines/python/CosmosDB/requirements.txt
+        displayName: 'Install Python dependencies for CosmosDB seeding script'
+  
+      - script: /usr/bin/python3 .ado/pipelines/python/CosmosDB/seed.py --endpoint $(cosmosDBEndpoint) --key $(cosmosDBKey) --database $(cosmosDBDatabaseName) --container $(cosmosDBContainerName) --configdata .ado/pipelines/python/CosmosDB/ConfigData/
+        displayName: 'Execute Python script for StorageAccount seeding'
 
-      # Output the values to verify
-      # Write-Host "Cosmos DB Key: $cosmosDBKey"
-      # Write-Host "Cosmos DB Container Name: $cosmosDBContainerName"
-      # Write-Host "Cosmos DB Database Name: $cosmosDBDatabaseName"
-      # Write-Host "Cosmos DB Endpoint: $cosmosDBEndpoint"
-      # Write-Host "Cosmos DB Location: $cosmosDBLocation"
-
-      # $cosmosDBEndpoint=$var.cosmosDBEndpoint.value
-
-      echo "##vso[task.setvariable variable=cosmosDBEndpoint]$cosmosDBEndpoint"
-      echo "##vso[task.setvariable variable=cosmosDBKey]$cosmosDBKey"
-      echo "##vso[task.setvariable variable=cosmosDBContainerName]$cosmosDBContainerName"
-      echo "##vso[task.setvariable variable=cosmosDBDatabaseName]$cosmosDBDatabaseName"
-#      Write-Host "Value of cosmosDBEndpoint is: $cosmosDBEndpoint"
-
-  # - script: env
-  #   displayName: 'Print environment variables'
-
-  # - script: which python3
-  #   displayName: 'Locate Python3'
-
-  - script: /usr/bin/pip3 install -r .ado/pipelines/python/CosmosDB/requirements.txt
-    displayName: 'Install Python dependencies'
-
-  - script: /usr/bin/python3 .ado/pipelines/python/CosmosDB/seed.py --endpoint $(cosmosDBEndpoint) --key $(cosmosDBKey) --database $(cosmosDBDatabaseName) --container $(cosmosDBContainerName) --configdata .ado/pipelines/python/CosmosDB/ConfigData/
-    displayName: 'Execute Python script'
+      - script: /usr/bin/pip3 install -r .ado/pipelines/python/StorageAccount/requirements.txt
+        displayName: 'Install Python dependencies for StorageAccount seeding script'
+    
+      - script: /usr/bin/python3 .ado/pipelines/python/StorageAccount/seed.py --connectionString $(storageAccountConnectiongString) --configdata .ado/pipelines/python/StorageAccount/ConfigData/
+        displayName: 'Execute Python script for StorageAccount seeding'
+    

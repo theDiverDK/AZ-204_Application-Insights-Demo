@@ -113,6 +113,8 @@ output cosmosDBKey string = cosmosDB.outputs.cosmosDBMasterKey
 output cosmosDBDatabaseName string = cosmosDB.outputs.cosmosDBDatabaseName
 output cosmosDBContainerName string = cosmosDB.outputs.cosmosDBContainerName
 
+output storageAccountConnectiongString string = storageAccount.outputs.connectionString
+
 // Setup three Role Assignments on the Storage Account for 
 // the function app's Managed identity
 // Build in roles:
