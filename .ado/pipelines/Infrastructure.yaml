@@ -91,7 +91,7 @@ stages:
   
   - stage: 
     displayName: 'Build and deploy WebApp'
-    dependsOn: 'Deploy_Infrastructure_stage'
+    # dependsOn: 'Deploy_Infrastructure_stage'
     jobs:
       - job:
         steps:
