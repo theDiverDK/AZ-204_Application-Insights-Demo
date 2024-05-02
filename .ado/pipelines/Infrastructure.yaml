@@ -132,11 +132,11 @@ stages:
               artifact: $(appName)-$(environment)-app
               publishLocation: "pipeline"
 
-          # - template: DeployWebApp.yaml
-          #   parameters:
-          #     webAppName: $(webAppName)
-          #     Environment: $(environment)
-          #     AppServiceName: $(appName)-$(environment)-app
-          #     AppType: webApp
-          #     ServiceConnection: $(azureServiceConnectionName)
-                        
+  - template: DeployWebApp.yaml
+    parameters:
+      webAppName: $(webAppName)
+      Environment: $(environment)
+      AppServiceName: $(appName)-$(environment)-app
+      AppType: webApp
+      ServiceConnection: $(azureServiceConnectionName)
+                
