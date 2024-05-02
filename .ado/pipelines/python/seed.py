@@ -1,6 +1,4 @@
-import azure.cosmos.cosmos_client as cosmos_client
-import azure.cosmos.exceptions as exceptions
-from azure.cosmos.partition_key import PartitionKey
+from azure.cosmos import exceptions, CosmosClient, PartitionKey
 import argparse
 import os
 import json
@@ -31,7 +29,7 @@ def upsert_config_item(container, config_doc):
 
 def get_cosmos_client():
     """Gets Cosmos client to connect to the database"""
-    return cosmos_client.CosmosClient(HOST, {'masterKey': MASTER_KEY})
+    return CosmosClient(HOST, {'masterKey': MASTER_KEY})
 
 
 def get_cosmos_database(client):
@@ -53,6 +51,7 @@ def get_cosmos_container(database, container_id):
 
 
 def process_config_docs():
+    print("\nprocess_config_docs started")
     client = get_cosmos_client()
 
     try:
@@ -60,8 +59,10 @@ def process_config_docs():
         db = get_cosmos_database(client)
 
         config_data_dir = os.scandir(CONFIG_DATA_DIR)
+        print("Iterating directories in '{0}'".format(CONFIG_DATA_DIR))
 
         for entry in config_data_dir:
+            print ("Processing directory '{0}'".format(entry.name))
             if entry.is_dir():
                 print("Iterating files in '{0}' directory.".format(entry.name))
                 container = get_cosmos_container(db, entry.name)
@@ -72,8 +73,10 @@ def process_config_docs():
                         print("Processing file '{0}'". format(file_entry.name))
                         with open(file_entry.path) as json_file:
                             data = json.load(json_file)
-                            response = upsert_config_item(container, data)
-                            print('Upserted Item\'s Id is {0}'.format(response['id']))
+
+                            for item in data:
+                                response = upsert_config_item(container, item)
+                                print('Upserted Item\'s Id is {0}'.format(response['id']))
 
                 current_dir.close()
                 
