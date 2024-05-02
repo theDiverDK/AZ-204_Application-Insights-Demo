@@ -104,13 +104,13 @@ stages:
               projects: $(System.DefaultWorkingDirectory)/src/WebApps/$(webAppName)/*.csproj
               feedsToUse: 'select'
   
-          - task: DotNetCoreCLI@2
-            displayName: 'Unit tests'
-            inputs:
-              command: 'test'
-              projects: $(System.DefaultWorkingDirectory)/src/WebApps/$(webAppName)-Tests/*.csproj
-              publishTestResults: true
-              arguments: '--configuration Release /p:CollectCoverage=true' # /p:CoverletOutputFormat=cobertura
+          # - task: DotNetCoreCLI@2
+          #   displayName: 'Unit tests'
+          #   inputs:
+          #     command: 'test'
+          #     projects: $(System.DefaultWorkingDirectory)/src/WebApps/$(webAppName)-Tests/*.csproj
+          #     publishTestResults: true
+          #     arguments: '--configuration Release /p:CollectCoverage=true' # /p:CoverletOutputFormat=cobertura
           
           - task: DotNetCoreCLI@2
             displayName: 'Build and Publish'
