@@ -129,4 +129,4 @@ stages:
               AppServiceName: $(appName)-$(environment)-app
               AppType: webApp
               ServiceConnection: $(azureServiceConnectionName)
-              ResourceGroupName: $(resourceGroupName)                
+           
