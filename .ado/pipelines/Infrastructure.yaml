@@ -108,33 +108,21 @@ stages:
               AppType: webApp
               ServiceConnection: $(azureServiceConnectionName)
 
-              # - task: DotNetCoreCLI@2
-          #   displayName: 'Restore Nuget Packages'
-          #   inputs:
-          #     command: 'restore'
-          #     projects: $(System.DefaultWorkingDirectory)/src/WebApps/$(webAppName)/*.csproj
-          #     feedsToUse: 'select'
-  
-          # - task: DotNetCoreCLI@2
-          #   displayName: 'Build and Publish'
-          #   inputs:
-          #     command: 'publish'
-          #     projects: $(System.DefaultWorkingDirectory)/src/WebApps/$(webAppName)/*.csproj
-          #     publishWebProjects: false
-          #     arguments: "-o $(Build.ArtifactStagingDirectory) --configuration Release"
-    
-          # - task: PublishPipelineArtifact@1 
-          #   displayName: 'Publish artifact'
-          #   inputs: 
-          #     targetPath: "$(Build.ArtifactStagingDirectory)"
-          #     artifact: $(appName)-$(environment)-app
-          #     publishLocation: "pipeline"
+  - stage: 
+    displayName: 'Build WebApps/Application_Insight'
+    # dependsOn: 'Deploy_Infrastructure_stage'
 
-          # - template: DeployWebApp.yaml
-          #   parameters:
-          #     webAppName: $(webAppName)
-          #     Environment: $(environment)
-          #     AppServiceName: $(appName)-$(environment)-app
-          #     AppType: webApp
-          #     ServiceConnection: $(azureServiceConnectionName)
-           
+    variables:
+      webAppName: Application_Insight
+      environment: test
+
+    jobs:
+      - job:
+        steps:
+          - template: build-deploy-webapp-template.yaml
+            parameters:
+              webAppName: $(webAppName)
+              Environment: $(environment)
+              AppServiceName: $(appName)-$(environment)-app
+              AppType: webApp
+              ServiceConnection: $(azureServiceConnectionName)
