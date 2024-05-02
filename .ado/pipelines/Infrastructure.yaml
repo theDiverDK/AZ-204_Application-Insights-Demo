@@ -85,5 +85,5 @@ stages:
           - script: /usr/bin/pip3 install -r .ado/pipelines/python/StorageAccount/requirements.txt
             displayName: 'Install Python dependencies for StorageAccount seeding script'
 
-          - script: /usr/bin/python3 .ado/pipelines/python/StorageAccount/seed.py --connectionstring $(storageAccountConnectionString) --configdata .ado/pipelines/python/StorageAccount/ConfigData/
+          - script: /usr/bin/python3 .ado/pipelines/python/StorageAccount/seed.py --connectionstring "$(storageAccountConnectionString)" --configdata ".ado/pipelines/python/StorageAccount/ConfigData/"
             displayName: 'Execute Python script for StorageAccount seeding'
