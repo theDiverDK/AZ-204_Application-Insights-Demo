@@ -37,7 +37,7 @@ steps:
       artifact: ${{ parameters.AppServiceName }}
       publishLocation: "pipeline"
 
-  - template: DeployWebApp.yaml
+  - template: deploy-webapp-template.yaml
     parameters:
       webAppName: $(webAppName)
       Environment: $(environment)
