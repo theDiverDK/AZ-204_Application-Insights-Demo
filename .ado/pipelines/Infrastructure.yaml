@@ -100,7 +100,7 @@ stages:
     jobs:
       - job:
         steps:
-          - template: build-deloy-webapp-template.yml
+          - template: build-deloy-webapp-template.yaml
             parameters:
               webAppName: $(webAppName)
               Environment: $(environment)
