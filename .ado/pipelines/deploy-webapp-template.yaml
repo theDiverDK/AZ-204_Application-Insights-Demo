@@ -15,8 +15,6 @@ parameters:
     type: string
 
 steps:
-  - script: echo ${{ parameters.AppServiceName }}
-
   - task: AzureWebApp@1
     inputs:
       azureSubscription: ${{ parameters.ServiceConnection }}

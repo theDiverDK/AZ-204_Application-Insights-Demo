@@ -71,6 +71,21 @@ module webApp 'webApp.bicep' = {
   }
 }
 
+//Web App
+var webAppName2 = 'appinsight-${env}-app'
+module webApp2 'webApp.bicep' = {
+  name: webAppName2
+  params: {
+    appName: webAppName2
+    farmId: plan.outputs.id
+    applicationInsightInstrumentationKey: appInsight.outputs.instrumentationKey
+    applicationInsightConnectionString: appInsight.outputs.appInsightConnectionString
+    location: location
+    storageAccountConnectionString: storageAccount.outputs.connectionString
+    storageAccountName: storageAccount.outputs.name
+  }
+}
+
 //Availability Test
 var availabilityTestName = 'availabilityTest'
 module availabilityTest 'availabilityTest.bicep' = {
