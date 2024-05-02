@@ -13,8 +13,13 @@ pool:
 
 variables:
   - group: 'Production Variables'
+
   - name: webAppName
     value: WebApplication1
+
+  - name: webAppType
+    value: webApp
+
 
 pr: none
 
@@ -126,4 +131,10 @@ stages:
               targetPath: "$(Build.ArtifactStagingDirectory)"
               artifact: $(appName)-$(environment)-app
               publishLocation: "pipeline"
-  
+
+          - task: AzureWebApp@1
+            inputs:
+              azureSubscription: ${{ parameters.ServiceConnection }}
+              appType: $webAppType
+              appName: ${{ parameters.AppServiceName }}
+              package: '$(Pipeline.workspace)/$AppServiceName/$weAppName.zip'  
