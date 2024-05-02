@@ -67,11 +67,11 @@ stages:
     displayName: 'Seed CosmosDB and StorageAccount'
     dependsOn: 'Deploy_Infrastructure_stage'
     variables:
-      cosmosDBEndpoint: $[ stageDependencies.Deploy_Infrastructure_stage.Deploy_Infrastructure_jobs.outputs['Deploy_Infrastructure_jobs.cosmosDBEndpoint'] ]
-      cosmosDBKey: $[ stageDependencies.Deploy_Infrastructure_stage.Deploy_Infrastructure_jobs.outputs['Deploy_Infrastructure_jobs.cosmosDBKey'] ]
-      cosmosDBContainerName: $[ stageDependencies.Deploy_Infrastructure_stage.Deploy_Infrastructure_jobs.outputs['Deploy_Infrastructure_jobs.cosmosDBContainerName'] ]
-      cosmosDBDatabaseName: $[ stageDependencies.Deploy_Infrastructure_stage.Deploy_Infrastructure_jobs.outputs['Deploy_Infrastructure_jobs.cosmosDBDatabaseName'] ]
-      storageAccountConnectionString: $[ stageDependencies.Deploy_Infrastructure_stage.Deploy_Infrastructure_jobs.outputs['Deploy_Infrastructure_jobs.storageAccountConnectionString'] ]
+      cosmosDBEndpoint: $[ stageDependencies.Deploy_Infrastructure_stage.Deploy_Infrastructure_jobs.outputs['powershell.cosmosDBEndpoint'] ]
+      cosmosDBKey: $[ stageDependencies.Deploy_Infrastructure_stage.Deploy_Infrastructure_jobs.outputs['powershell.cosmosDBKey'] ]
+      cosmosDBContainerName: $[ stageDependencies.Deploy_Infrastructure_stage.Deploy_Infrastructure_jobs.outputs['powershell.cosmosDBContainerName'] ]
+      cosmosDBDatabaseName: $[ stageDependencies.Deploy_Infrastructure_stage.Deploy_Infrastructure_jobs.outputs['powershell.cosmosDBDatabaseName'] ]
+      storageAccountConnectionString: $[ stageDependencies.Deploy_Infrastructure_stage.Deploy_Infrastructure_jobs.outputs['powershell.storageAccountConnectionString'] ]
 
     jobs:
       - job:
