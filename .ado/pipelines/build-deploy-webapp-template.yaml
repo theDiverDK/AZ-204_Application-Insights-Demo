@@ -30,7 +30,7 @@ steps:
   - task: PublishPipelineArtifact@1
     displayName: 'Publish artifact'
     inputs:
-      targetPath: "$(Build.ArtifactStagingDirectory)"
+      targetPath: "$(Build.ArtifactStagingDirectory)/${{ parameters.webAppName }}"
       artifact: ${{ parameters.appServiceName }}
       publishLocation: "pipeline"
 
@@ -39,14 +39,22 @@ steps:
           echo "appServiceName: ${{ parameters.appServiceName }}"
           echo "appType: ${{ parameters.appType }}"
           echo "azureServiceConnectionName: ${{ parameters.azureServiceConnectionName }}"
-          echo "targetPath: $(Build.ArtifactStagingDirectory)"
+          echo "targetPath: $(Build.ArtifactStagingDirectory)/${{ parameters.webAppName }}"
           echo "artifact: ${{ parameters.appServiceName }}"
-          
+
     displayName: 'Print variables using Bash from build-deploy-webapp-template.yaml'
 
-  - template: deploy-webapp-template.yaml
-    parameters:
-      webAppName: ${{ parameters.webAppName }}
-      appServiceName: ${{ parameters.appServiceName }}
+  - task: AzureWebApp@1
+    displayName: 'Deploy Azure Web App'
+    inputs:
+      azureSubscription: ${{ parameters.azureServiceConnectionName }}
       appType: ${{ parameters.appType }}
-      azureServiceConnectionName: ${{ parameters.azureServiceConnectionName }}
+      appName: ${{ parameters.appServiceName }}
+      package: '$(Pipeline.workspace)/${{ parameters.appServiceName }}/${{ parameters.webAppName }}.zip'
+      
+  # - template: deploy-webapp-template.yaml
+  #   parameters:
+  #     webAppName: ${{ parameters.webAppName }}
+  #     appServiceName: ${{ parameters.appServiceName }}
+  #     appType: ${{ parameters.appType }}
+  #     azureServiceConnectionName: ${{ parameters.azureServiceConnectionName }}
