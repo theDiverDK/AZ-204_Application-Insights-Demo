@@ -17,77 +17,77 @@ variables:
 pr: none
 
 stages:
-  # - stage: Deploy_Infrastructure_stage
-  #   displayName: 'Deploy Infrastructure'
+  - stage: Deploy_Infrastructure_stage
+    displayName: 'Deploy Infrastructure'
 
-  #   jobs:
-  #     - job: Deploy_Infrastructure_jobs
+    jobs:
+      - job: Deploy_Infrastructure_jobs
 
-  #       steps:
-  #         - task: AzureCLI@2
-  #           displayName: Create or update the resource group
-  #           inputs:
-  #             azureSubscription: '$(azureServiceConnectionName)'
-  #             scriptType: pscore
-  #             scriptLocation: inlineScript
-  #             inlineScript: |
-  #               az group create --location $(location) --name $(resourceGroupName)
+        steps:
+          - task: AzureCLI@2
+            displayName: Create or update the resource group
+            inputs:
+              azureSubscription: '$(azureServiceConnectionName)'
+              scriptType: pscore
+              scriptLocation: inlineScript
+              inlineScript: |
+                az group create --location $(location) --name $(resourceGroupName)
 
-  #         - task: AzureResourceManagerTemplateDeployment@3
-  #           displayName: 'Deploy all infrastructure'
-  #           inputs:
-  #             connectedServiceName: $(azureServiceConnectionName)
-  #             location: $(location)
-  #             resourceGroupName: $(resourceGroupName)
-  #             csmFile: .azure/bicep/infrastructure.bicep
-  #             overrideParameters: 
-  #               -appName $(appName)
-  #               -env $(environment)
-  #             deploymentOutputs: infrastructureAsCodeOutputs
+          - task: AzureResourceManagerTemplateDeployment@3
+            displayName: 'Deploy all infrastructure'
+            inputs:
+              connectedServiceName: $(azureServiceConnectionName)
+              location: $(location)
+              resourceGroupName: $(resourceGroupName)
+              csmFile: .azure/bicep/infrastructure.bicep
+              overrideParameters: 
+                -appName $(appName)
+                -env $(environment)
+              deploymentOutputs: infrastructureAsCodeOutputs
 
-  #         - powershell: |
+          - powershell: |
 
-  #             # Convert JSON-like string to a PowerShell object
-  #             $variables = ConvertFrom-Json '$(infrastructureAsCodeOutputs)'
+              # Convert JSON-like string to a PowerShell object
+              $variables = ConvertFrom-Json '$(infrastructureAsCodeOutputs)'
 
-  #             # Access specific properties
-  #             $cosmosDBEndpoint = $variables.cosmosDBEndpoint.value
-  #             $cosmosDBKey = $variables.cosmosDBKey.value
-  #             $cosmosDBContainerName = $variables.cosmosDBContainerName.value
-  #             $cosmosDBDatabaseName = $variables.cosmosDBDatabaseName.value
-  #             $storageAccountConnectionString = $variables.storageAccountConnectionString.value
+              # Access specific properties
+              $cosmosDBEndpoint = $variables.cosmosDBEndpoint.value
+              $cosmosDBKey = $variables.cosmosDBKey.value
+              $cosmosDBContainerName = $variables.cosmosDBContainerName.value
+              $cosmosDBDatabaseName = $variables.cosmosDBDatabaseName.value
+              $storageAccountConnectionString = $variables.storageAccountConnectionString.value
 
-  #             echo "##vso[task.setvariable variable=cosmosDBEndpoint;isOutput=true]$cosmosDBEndpoint"
-  #             echo "##vso[task.setvariable variable=cosmosDBKey;isOutput=true]$cosmosDBKey"
-  #             echo "##vso[task.setvariable variable=cosmosDBContainerName;isOutput=true]$cosmosDBContainerName"
-  #             echo "##vso[task.setvariable variable=cosmosDBDatabaseName;isOutput=true]$cosmosDBDatabaseName"
+              echo "##vso[task.setvariable variable=cosmosDBEndpoint;isOutput=true]$cosmosDBEndpoint"
+              echo "##vso[task.setvariable variable=cosmosDBKey;isOutput=true]$cosmosDBKey"
+              echo "##vso[task.setvariable variable=cosmosDBContainerName;isOutput=true]$cosmosDBContainerName"
+              echo "##vso[task.setvariable variable=cosmosDBDatabaseName;isOutput=true]$cosmosDBDatabaseName"
 
-  #             echo "##vso[task.setvariable variable=storageAccountConnectionString;isOutput=true]$storageAccountConnectionString"
+              echo "##vso[task.setvariable variable=storageAccountConnectionString;isOutput=true]$storageAccountConnectionString"
 
-  # - stage:
-  #   displayName: 'Seed CosmosDB and StorageAccount'
-  #   dependsOn: 'Deploy_Infrastructure_stage'
-  #   variables:
-  #     cosmosDBEndpoint: $[ stageDependencies.Deploy_Infrastructure_stage.Deploy_Infrastructure_jobs.outputs['powershell.cosmosDBEndpoint'] ]
-  #     cosmosDBKey: $[ stageDependencies.Deploy_Infrastructure_stage.Deploy_Infrastructure_jobs.outputs['powershell.cosmosDBKey'] ]
-  #     cosmosDBContainerName: $[ stageDependencies.Deploy_Infrastructure_stage.Deploy_Infrastructure_jobs.outputs['powershell.cosmosDBContainerName'] ]
-  #     cosmosDBDatabaseName: $[ stageDependencies.Deploy_Infrastructure_stage.Deploy_Infrastructure_jobs.outputs['powershell.cosmosDBDatabaseName'] ]
-  #     storageAccountConnectionString: $[ stageDependencies.Deploy_Infrastructure_stage.Deploy_Infrastructure_jobs.outputs['powershell.storageAccountConnectionString'] ]
+  - stage:
+    displayName: 'Seed CosmosDB and StorageAccount'
+    dependsOn: 'Deploy_Infrastructure_stage'
+    variables:
+      cosmosDBEndpoint: $[ stageDependencies.Deploy_Infrastructure_stage.Deploy_Infrastructure_jobs.outputs['powershell.cosmosDBEndpoint'] ]
+      cosmosDBKey: $[ stageDependencies.Deploy_Infrastructure_stage.Deploy_Infrastructure_jobs.outputs['powershell.cosmosDBKey'] ]
+      cosmosDBContainerName: $[ stageDependencies.Deploy_Infrastructure_stage.Deploy_Infrastructure_jobs.outputs['powershell.cosmosDBContainerName'] ]
+      cosmosDBDatabaseName: $[ stageDependencies.Deploy_Infrastructure_stage.Deploy_Infrastructure_jobs.outputs['powershell.cosmosDBDatabaseName'] ]
+      storageAccountConnectionString: $[ stageDependencies.Deploy_Infrastructure_stage.Deploy_Infrastructure_jobs.outputs['powershell.storageAccountConnectionString'] ]
 
-  #   jobs:
-  #     - job:
-  #       steps:
-  #         - script: /usr/bin/pip3 install -r .ado/pipelines/python/CosmosDB/requirements.txt
-  #           displayName: 'Install Python dependencies for CosmosDB seeding script'
+    jobs:
+      - job:
+        steps:
+          - script: /usr/bin/pip3 install -r .ado/pipelines/python/CosmosDB/requirements.txt
+            displayName: 'Install Python dependencies for CosmosDB seeding script'
 
-  #         - script: /usr/bin/python3 .ado/pipelines/python/CosmosDB/seed.py --endpoint $(cosmosDBEndpoint) --key $(cosmosDBKey) --database $(cosmosDBDatabaseName) --container $(cosmosDBContainerName) --configdata .ado/pipelines/python/CosmosDB/ConfigData/
-  #           displayName: 'Execute Python script for CosmosDB seeding'
+          - script: /usr/bin/python3 .ado/pipelines/python/CosmosDB/seed.py --endpoint $(cosmosDBEndpoint) --key $(cosmosDBKey) --database $(cosmosDBDatabaseName) --container $(cosmosDBContainerName) --configdata .ado/pipelines/python/CosmosDB/ConfigData/
+            displayName: 'Execute Python script for CosmosDB seeding'
 
-  #         - script: /usr/bin/pip3 install -r .ado/pipelines/python/StorageAccount/requirements.txt
-  #           displayName: 'Install Python dependencies for StorageAccount seeding script'
+          - script: /usr/bin/pip3 install -r .ado/pipelines/python/StorageAccount/requirements.txt
+            displayName: 'Install Python dependencies for StorageAccount seeding script'
 
-  #         - script: /usr/bin/python3 .ado/pipelines/python/StorageAccount/seed.py --connectionstring "$(storageAccountConnectionString)" --configdata ".ado/pipelines/python/StorageAccount/ConfigData/"
-  #           displayName: 'Execute Python script for StorageAccount seeding'
+          - script: /usr/bin/python3 .ado/pipelines/python/StorageAccount/seed.py --connectionstring "$(storageAccountConnectionString)" --configdata ".ado/pipelines/python/StorageAccount/ConfigData/"
+            displayName: 'Execute Python script for StorageAccount seeding'
   
   - stage: 
     displayName: 'Build/Depoy WebApplication1 webapp'
@@ -95,7 +95,6 @@ stages:
 
     variables:
       webAppName: WebApplication1
-      environment: test
 
     jobs:
       - job:
@@ -113,7 +112,6 @@ stages:
 
     variables:
       webAppName: Application_Insight
-      environment: test
 
     jobs:
       - job:
