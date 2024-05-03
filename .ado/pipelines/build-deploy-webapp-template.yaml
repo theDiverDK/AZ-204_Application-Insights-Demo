@@ -41,6 +41,7 @@ steps:
           echo "azureServiceConnectionName: ${{ parameters.azureServiceConnectionName }}"
           echo "targetPath: $(Build.ArtifactStagingDirectory)/${{ parameters.webAppName }}"
           echo "artifact: ${{ parameters.appServiceName }}"
+          echo "package: $(Pipeline.workspace)/${{ parameters.appServiceName }}/${{ parameters.webAppName }}.zip"
 
     displayName: 'Print variables using Bash from build-deploy-webapp-template.yaml'
 
