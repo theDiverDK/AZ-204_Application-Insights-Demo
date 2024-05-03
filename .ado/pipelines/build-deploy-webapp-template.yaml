@@ -42,7 +42,7 @@ steps:
           echo "environment: $(environment)"
           echo "AppServiceName): $(AppServiceName)"
           echo "azureServiceConnectionName): $(azureServiceConnectionName)"
-        displayName: 'Print variables using Bash from build-deploy-webapp-template.yaml'
+    displayName: 'Print variables using Bash from build-deploy-webapp-template.yaml'
 
   - template: deploy-webapp-template.yaml
     parameters:
