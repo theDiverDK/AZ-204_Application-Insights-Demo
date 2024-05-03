@@ -12,6 +12,13 @@ parameters:
     type: string
 
 steps:
+  - script: |
+          echo "webAppName: ${{ parameters.webAppName }}"
+          echo "appServiceName: ${{ parameters.appServiceName }}"
+          echo "appType: ${{ parameters.appType }}"
+          echo "azureServiceConnectionName: ${{ parameters.azureServiceConnectionName }}"
+    displayName: 'Print variables using Bash from deploy-webapp-template.yaml'
+
   - task: AzureWebApp@1
     displayName: 'Deploy Azure Web App'
     inputs:
