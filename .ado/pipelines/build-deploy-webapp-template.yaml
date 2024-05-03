@@ -35,13 +35,13 @@ steps:
       publishLocation: "pipeline"
 
   - script: |
-          echo "webAppName: $(webAppName)"
-          echo "appServiceName: $(appServiceName)"
+          echo "webAppName: ${{ parameters.webAppName }}"
+          echo "appServiceName: ${{ parameters.appServiceName }}"
     displayName: 'Print variables using Bash from build-deploy-webapp-template.yaml'
 
   - template: deploy-webapp-template.yaml
     parameters:
-      webAppName: $(webAppName)
-      appServiceName: $(appServiceName)
-      appType: $(appType)
-      azureServiceConnectionName: $(azureServiceConnectionName)
+      webAppName: ${{ parameters.webAppName }}
+      appServiceName: ${{ parameters.appServiceName }}
+      appType: ${{ parameters.appType }}
+      azureServiceConnectionName: ${{ parameters.azureServiceConnectionName }}
