@@ -119,13 +119,6 @@ stages:
     jobs:
       - job:
         steps:
-          - script: |
-            echo "webAppName: $(webAppName)"
-            echo "environment: $(environment)"
-            echo "AppServiceName): $(AppServiceName)"
-            echo "azureServiceConnectionName): $(azureServiceConnectionName)"
-            displayName: 'Print variables using Bash from build-deploy-webapp-template.yaml'
-
           - template: build-deploy-webapp-template.yaml
             parameters:
               webAppName: $(webAppName)
