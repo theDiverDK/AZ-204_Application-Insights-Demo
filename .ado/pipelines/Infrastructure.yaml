@@ -89,23 +89,23 @@ stages:
   #         - script: /usr/bin/python3 .ado/pipelines/python/StorageAccount/seed.py --connectionstring "$(storageAccountConnectionString)" --configdata ".ado/pipelines/python/StorageAccount/ConfigData/"
   #           displayName: 'Execute Python script for StorageAccount seeding'
   
-  # - stage: 
-  #   displayName: 'Build/Depoy WebApplication1 webapp'
-  #   # dependsOn: 'Deploy_Infrastructure_stage'
+  - stage: 
+    displayName: 'Build/Depoy WebApplication1 webapp'
+    # dependsOn: 'Deploy_Infrastructure_stage'
 
-  #   variables:
-  #     webAppName: WebApplication1
-  #     environment: test
+    variables:
+      webAppName: WebApplication1
+      environment: test
 
-    # jobs:
-    #   - job:
-    #     steps:
-    #       - template: build-deploy-webapp-template.yaml
-    #         parameters:
-    #           webAppName: $(webAppName)
-    #           appServiceName: $(appName)-$(environment)-app
-    #           appType: webApp
-    #           azureServiceConnectionName: $(azureServiceConnectionName)
+    jobs:
+      - job:
+        steps:
+          - template: build-deploy-webapp-template.yaml
+            parameters:
+              webAppName: $(webAppName)
+              appServiceName: $(appName)-$(environment)-app
+              appType: webApp
+              azureServiceConnectionName: $(azureServiceConnectionName)
 
   - stage: 
     displayName: 'Build/Deploy Application_Insight webapp'
