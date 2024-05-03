@@ -1,25 +1,22 @@
 parameters:
-  - name: Environment
+  - name: webAppName
     type: string
 
-  - name: WebAppName
-    type: string
-
-  - name: AppServiceName
+  - name: appServiceName
     type: string
   
-  - name: AppType
+  - name: appType
     type: string
   
-  - name: ServiceConnection
+  - name: azureServiceConnectionName
     type: string
 
 steps:
   - task: AzureWebApp@1
     displayName: 'Deploy Azure Web App'
     inputs:
-      azureSubscription: ${{ parameters.ServiceConnection }}
-      appType: ${{ parameters.AppType }}
-      appName: ${{ parameters.AppServiceName }}
-      package: '$(Pipeline.workspace)/${{ parameters.AppServiceName }}/${{ parameters.WebAppName }}.zip'
+      azureSubscription: ${{ parameters.azureServiceConnectionName }}
+      appType: ${{ parameters.appType }}
+      appName: ${{ parameters.appServiceName }}
+      package: '$(Pipeline.workspace)/${{ parameters.appServiceName }}/${{ parameters.webAppName }}.zip'
 

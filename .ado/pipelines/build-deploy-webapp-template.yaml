@@ -2,16 +2,13 @@ parameters:
   - name: webAppName
     type: string
 
-  - name: environment
-    type: string
-    
-  - name: AppServiceName
+  - name: appServiceName
     type: string
   
-  - name: AppType
+  - name: appType
     type: string
   
-  - name: ServiceConnection
+  - name: azureServiceConnectionName
     type: string
 
 steps:
@@ -34,20 +31,17 @@ steps:
     displayName: 'Publish artifact'
     inputs:
       targetPath: "$(Build.ArtifactStagingDirectory)"
-      artifact: ${{ parameters.AppServiceName }}
+      artifact: ${{ parameters.appServiceName }}
       publishLocation: "pipeline"
 
   - script: |
           echo "webAppName: $(webAppName)"
-          echo "environment: $(environment)"
-          echo "AppServiceName): $(AppServiceName)"
-          echo "azureServiceConnectionName): $(azureServiceConnectionName)"
+          echo "appServiceName: $(appServiceName)"
     displayName: 'Print variables using Bash from build-deploy-webapp-template.yaml'
 
   - template: deploy-webapp-template.yaml
     parameters:
       webAppName: $(webAppName)
-      Environment: $(environment)
-      AppServiceName: $(AppServiceName)
-      AppType: webApp
-      ServiceConnection: $(azureServiceConnectionName)
+      appServiceName: $(appServiceName)
+      appType: $(appType)
+      azureServiceConnectionName: $(azureServiceConnectionName)
