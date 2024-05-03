@@ -51,7 +51,7 @@ steps:
       azureSubscription: ${{ parameters.azureServiceConnectionName }}
       appType: ${{ parameters.appType }}
       appName: ${{ parameters.appServiceName }}
-      package: '$(Pipeline.workspace)/${{ parameters.appServiceName }}/${{ parameters.webAppName }}.zip'
+      package: '$(Build.ArtifactStagingDirectory)/${{ parameters.webAppName }}.zip'
 
   # - template: deploy-webapp-template.yaml
   #   parameters:
