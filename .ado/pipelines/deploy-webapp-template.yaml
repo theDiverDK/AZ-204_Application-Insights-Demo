@@ -17,6 +17,7 @@ steps:
           echo "appServiceName: ${{ parameters.appServiceName }}"
           echo "appType: ${{ parameters.appType }}"
           echo "azureServiceConnectionName: ${{ parameters.azureServiceConnectionName }}"
+          echo "package: $(Pipeline.workspace)/${{ parameters.appServiceName }}/${{ parameters.webAppName }}.zip"
     displayName: 'Print variables using Bash from deploy-webapp-template.yaml'
 
   - task: AzureWebApp@1
