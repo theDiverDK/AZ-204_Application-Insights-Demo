@@ -12,6 +12,7 @@
       <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0" />
       <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.39.1" />
       <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.0" />
+      <PackageReference Include="Microsoft.Identity.Web" Version="2.18.1" />
     </ItemGroup>
 
 </Project>
