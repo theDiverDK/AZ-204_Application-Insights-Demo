@@ -20,21 +20,22 @@ class Product
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly IConfiguration _config;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, IConfiguration config)
     {
         _logger = logger;
+        _config = config;
     }
 
     public IActionResult Index()
     {
-        HttpContext.Features.Get<RequestTelemetry>().Properties["myProp"] = "Dette er noget data";
         return View();
     }
 
     public IActionResult Privacy()
     {
-        var containerEndpoint = ("https://sasaccount0702.blob.core.windows.net/demo");
+        var containerEndpoint = _config.GetConnectionString("StorageAccountConnectionString");// ("https://sasaccount0702.blob.core.windows.net/demo");
 
         var containerClient = new BlobContainerClient(new Uri(containerEndpoint), new DefaultAzureCredential());
 
@@ -44,7 +45,7 @@ public class HomeController : Controller
 
         ViewBag.data = result;
 
-        var client = new CosmosClient("AccountEndpoint=https://appinsightcosmoms.documents.azure.com:443/;AccountKey=mmcWzekNYizQDiH0VELdt5kZToT6XUBGwwWeVLr188KLxPV3JHfrNJpbwmooudQUXInUenl0VQAVACDbiQe5LQ==;");
+        var client = new CosmosClient(_config.GetConnectionString("CosmosDBConnectionString"));
         var db = client.GetDatabase("ToDoList");
         var container = db.GetContainer("test");
 
