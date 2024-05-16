@@ -12,10 +12,10 @@ namespace Application_Insight.Controllers;
 
 class Product
 {
-    public string navn {
-        get;
-        set;
-    }
+
+    public string Name { get; set; }
+    public string id { get; set; }
+    public int Age { get; set; }
 }
 
 public class HomeController : Controller
@@ -36,9 +36,9 @@ public class HomeController : Controller
 
     public IActionResult Privacy()
     {
-        var containerEndpoint = _config.GetConnectionString("StorageAccountConnectionString");// ("https://sasaccount0702.blob.core.windows.net/demo");
+        var containerConnectionsString=_config.GetConnectionString("StorageAccountConnectionString");// ("https://sasaccount0702.blob.core.windows.net/demo");
 
-        var containerClient = new BlobContainerClient(new Uri(containerEndpoint), new DefaultAzureCredential());
+        var containerClient = new BlobContainerClient("DefaultEndpointsProtocol=https;AccountName=az204testst;AccountKey=XZw+RGFIQ0YJ5uOJBwkgR3RDUyHCzaZP/KXQSOEYSj6Iv+0pROJymvx/Kf2gAetLQQAvpaO9eh7R+AStR+H5QQ==;EndpointSuffix=core.windows.net", "files");
 
         var data = containerClient.GetBlobs();
 
@@ -46,9 +46,9 @@ public class HomeController : Controller
 
         ViewBag.data = result;
 
-        var client = new CosmosClient(_config.GetConnectionString("CosmosDBConnectionString"));
-        var db = client.GetDatabase("ToDoList");
-        var container = db.GetContainer("test");
+        var client = new CosmosClient("AccountEndpoint=https://az204-test-cosmosdb.documents.azure.com:443/;AccountKey=Tp3EXDBVut6PeTxcV9z0EcCnusECcpnzTl7yDnZgarwS7YfoPUI9wqDwFnU3FjK60dyqjnSXaTGrACDbrJCKNA==;");//_config.GetConnectionString("CosmosDBConnectionString"));
+        var db = client.GetDatabase("az204-test-database");
+        var container = db.GetContainer("az204-test-container");
 
 // Use SQL query language
         FeedIterator<Product> iterator = container.GetItemQueryIterator<Product>(
@@ -62,7 +62,7 @@ public class HomeController : Controller
                FeedResponse<Product> batch =  iterator.ReadNextAsync().GetAwaiter().GetResult();
                foreach (Product item in batch)
                {
-                   cosmosResult = cosmosResult + item.navn + ", ";
+                   cosmosResult = cosmosResult + item.Name + ", ";
                }
         }
 
