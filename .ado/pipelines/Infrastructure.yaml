@@ -122,3 +122,17 @@ stages:
               appServiceName: appinsight-$(environment)-app
               appType: webApp
               azureServiceConnectionName: $(azureServiceConnectionName)
+      - deployment: Deploy
+        dependsOn: Build
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+              - download: current
+                artifact: drop
+
+              - task: AzureWebApp@1
+                inputs:
+                  azureSubscription: 'myAzureServiceConnection'
+                  appName: 'myAzureWebApp'
+                  package: '$(Pipeline.Workspace)/drop/**/*'
