@@ -119,22 +119,6 @@ stages:
           - template: build-deploy-webapp-template.yaml
             parameters:
               webAppName: $(webAppName)
-              appServiceName: appinsight-$(environment)-app
+              appServiceName: $(appName)-$(environment)-app
               appType: webApp
               azureServiceConnectionName: $(azureServiceConnectionName)
-      - deployment: Deploy
-        environment: 'test'
-#        dependsOn: Build
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-              - download: current
-                artifact: drop
-
-              - task: AzureWebApp@1
-                inputs:
-                  azureSubscription: $(azureServiceConnectionName)
-                  appName: 'myAzureWebApp'
-                  package: '$(Pipeline.Workspace)/drop/**/*'
-                  appType: 'webApp'

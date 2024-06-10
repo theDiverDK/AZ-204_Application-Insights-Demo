@@ -45,13 +45,13 @@ steps:
 
     displayName: 'Print variables using Bash from build-deploy-webapp-template.yaml'
 
-#  - task: AzureWebApp@1
-##    displayName: 'Deploy Azure Web App'
-#    inputs:
-#      azureSubscription: ${{ parameters.azureServiceConnectionName }}
-#      appType: ${{ parameters.appType }}
-#      appName: ${{ parameters.appServiceName }}
-#      package: '$(Build.ArtifactStagingDirectory)/${{ parameters.webAppName }}/${{ parameters.webAppName }}.zip'
+  - task: AzureWebApp@1
+    displayName: 'Deploy Azure Web App'
+    inputs:
+      azureSubscription: ${{ parameters.azureServiceConnectionName }}
+      appType: ${{ parameters.appType }}
+      appName: ${{ parameters.appServiceName }}
+      package: '$(Build.ArtifactStagingDirectory)/${{ parameters.webAppName }}/${{ parameters.webAppName }}.zip'
 
   # - template: deploy-webapp-template.yaml
   #   parameters:
