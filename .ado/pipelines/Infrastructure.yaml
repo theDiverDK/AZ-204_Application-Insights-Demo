@@ -123,6 +123,7 @@ stages:
               appType: webApp
               azureServiceConnectionName: $(azureServiceConnectionName)
       - deployment: Deploy
+        environment: 'test'
         dependsOn: Build
         strategy:
           runOnce:
