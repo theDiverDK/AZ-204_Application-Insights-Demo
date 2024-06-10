@@ -124,7 +124,7 @@ stages:
               azureServiceConnectionName: $(azureServiceConnectionName)
       - deployment: Deploy
         environment: 'test'
-        dependsOn: Build
+#        dependsOn: Build
         strategy:
           runOnce:
             deploy:
