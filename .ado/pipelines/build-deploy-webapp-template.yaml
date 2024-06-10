@@ -10,64 +10,65 @@ parameters:
   
   - name: azureServiceConnectionName
     type: string
+
 jobs:
-  - job:
-    steps:
-      - task: DotNetCoreCLI@2
-        displayName: 'Restore Nuget Packages'
-        inputs:
-          command: 'restore'
-          projects: $(System.DefaultWorkingDirectory)/src/WebApps/${{ parameters.webAppName }}/*.csproj
-          feedsToUse: 'select'
+- job:
+  steps:
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore Nuget Packages'
+      inputs:
+        command: 'restore'
+        projects: $(System.DefaultWorkingDirectory)/src/WebApps/${{ parameters.webAppName }}/*.csproj
+        feedsToUse: 'select'
 
-      - task: DotNetCoreCLI@2
-        displayName: 'Build and Publish'
-        inputs:
-          command: 'publish'
-          projects: $(System.DefaultWorkingDirectory)/src/WebApps/${{ parameters.webAppName }}/*.csproj
-          publishWebProjects: false
-          arguments: "-o $(Build.ArtifactStagingDirectory)/${{ parameters.webAppName }} --configuration Release"
+    - task: DotNetCoreCLI@2
+      displayName: 'Build and Publish'
+      inputs:
+        command: 'publish'
+        projects: $(System.DefaultWorkingDirectory)/src/WebApps/${{ parameters.webAppName }}/*.csproj
+        publishWebProjects: false
+        arguments: "-o $(Build.ArtifactStagingDirectory)/${{ parameters.webAppName }} --configuration Release"
 
-      - task: PublishPipelineArtifact@1
-        displayName: 'Publish artifact'
-        inputs:
-          targetPath: "$(Build.ArtifactStagingDirectory)/${{ parameters.webAppName }}"
-          artifact: ${{ parameters.appServiceName }}
-          publishLocation: "pipeline"
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish artifact'
+      inputs:
+        targetPath: "$(Build.ArtifactStagingDirectory)/${{ parameters.webAppName }}"
+        artifact: ${{ parameters.appServiceName }}
+        publishLocation: "pipeline"
 
-      - script: |
-              echo "webAppName: ${{ parameters.webAppName }}"
-              echo "appServiceName: ${{ parameters.appServiceName }}"
-              echo "appType: ${{ parameters.appType }}"
-              echo "azureServiceConnectionName: ${{ parameters.azureServiceConnectionName }}"
-              echo "targetPath: $(Build.ArtifactStagingDirectory)/${{ parameters.webAppName }}"
-              echo "artifact: ${{ parameters.appServiceName }}"
-              echo "package: $(Pipeline.workspace)/${{ parameters.appServiceName }}/${{ parameters.webAppName }}.zip"
+    - script: |
+            echo "webAppName: ${{ parameters.webAppName }}"
+            echo "appServiceName: ${{ parameters.appServiceName }}"
+            echo "appType: ${{ parameters.appType }}"
+            echo "azureServiceConnectionName: ${{ parameters.azureServiceConnectionName }}"
+            echo "targetPath: $(Build.ArtifactStagingDirectory)/${{ parameters.webAppName }}"
+            echo "artifact: ${{ parameters.appServiceName }}"
+            echo "package: $(Pipeline.workspace)/${{ parameters.appServiceName }}/${{ parameters.webAppName }}.zip"
 
-        displayName: 'Print variables using Bash from build-deploy-webapp-template.yaml'
-
-
-  - deployment: Deploy
-    environment: 'production'
-    dependsOn: Build
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - download: current
-            artifact: drop
+      displayName: 'Print variables using Bash from build-deploy-webapp-template.yaml'
 
 
-          - task: AzureWebApp@1
-            displayName: 'Deploy Azure Web App'
-            inputs:
-              azureSubscription: ${{ parameters.azureServiceConnectionName }}
-              appType: ${{ parameters.appType }}
-              appName: ${{ parameters.appServiceName }}
-             # package: '$(Build.ArtifactStagingDirectory)/${{ parameters.webAppName }}/${{ parameters.webAppName }}.zip'
-              package: '$(Pipeline.Workspace)/drop/**/*'
+- deployment: Deploy
+  environment: 'production'
+  dependsOn: Build
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - download: current
+          artifact: drop
 
-              
+
+        - task: AzureWebApp@1
+          displayName: 'Deploy Azure Web App'
+          inputs:
+            azureSubscription: ${{ parameters.azureServiceConnectionName }}
+            appType: ${{ parameters.appType }}
+            appName: ${{ parameters.appServiceName }}
+            # package: '$(Build.ArtifactStagingDirectory)/${{ parameters.webAppName }}/${{ parameters.webAppName }}.zip'
+            package: '$(Pipeline.Workspace)/drop/**/*'
+
+
   # - template: deploy-webapp-template.yaml
   #   parameters:
   #     webAppName: ${{ parameters.webAppName }}
