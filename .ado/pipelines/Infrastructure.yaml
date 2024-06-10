@@ -119,6 +119,6 @@ stages:
           - template: build-deploy-webapp-template.yaml
             parameters:
               webAppName: $(webAppName)
-              appServiceName: $(appName)-$(environment)-app
+              appServiceName: appinsight-$(environment)-app
               appType: webApp
               azureServiceConnectionName: $(azureServiceConnectionName)
