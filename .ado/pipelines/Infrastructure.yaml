@@ -95,6 +95,7 @@ stages:
 
     variables:
       webAppName: WebApplication1
+      applicationName: az204
 
     jobs:
       - job:
@@ -102,7 +103,7 @@ stages:
           - template: build-deploy-webapp-template.yaml
             parameters:
               webAppName: $(webAppName)
-              appServiceName: $(appName)-$(environment)-app
+              appServiceName: $(applicationName)-$(environment)-app
               appType: webApp
               azureServiceConnectionName: $(azureServiceConnectionName)
 
@@ -112,6 +113,7 @@ stages:
 
     variables:
       webAppName: Application_Insight
+      applicationName: appInsight
 
     jobs:
       - job:
@@ -119,6 +121,6 @@ stages:
           - template: build-deploy-webapp-template.yaml
             parameters:
               webAppName: $(webAppName)
-              appServiceName: appinsight-$(environment)-app
+              appServiceName: $(applicationName)-$(environment)-app
               appType: webApp
               azureServiceConnectionName: $(azureServiceConnectionName)
