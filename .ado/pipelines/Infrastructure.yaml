@@ -137,3 +137,4 @@ stages:
                   azureSubscription: $(azureServiceConnectionName)
                   appName: 'myAzureWebApp'
                   package: '$(Pipeline.Workspace)/drop/**/*'
+                  appType: 'webApp'
