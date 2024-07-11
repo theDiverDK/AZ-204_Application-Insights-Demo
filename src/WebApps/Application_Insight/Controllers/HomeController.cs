@@ -39,7 +39,7 @@ public class HomeController : Controller
         if (containerEndpoint == null) {
 
             ViewBag.data = "Cant find WEBSITE_CONTENTAZUREFILECONNECTIONSTRING";
-            return;
+            return View();
         }
 
         var containerClient = new BlobContainerClient(new Uri(containerEndpoint), new DefaultAzureCredential());
