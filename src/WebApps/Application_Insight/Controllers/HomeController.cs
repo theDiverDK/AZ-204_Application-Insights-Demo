@@ -38,7 +38,7 @@ public class HomeController : Controller
     {
         var containerEndpoint = _config["WEBSITE_CONTENTAZUREFILECONNECTIONSTRING"];
 
-        var containerClient = new BlobContainerClient(new Uri(containerEndpoint), new DefaultAzureCredential());
+        var containerClient = new BlobContainerClient(containerEndpoint, "files");
 
         var data = containerClient.GetBlobs();
 
