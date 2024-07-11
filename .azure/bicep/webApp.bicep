@@ -38,10 +38,6 @@ resource webApp 'Microsoft.Web/sites@2023-01-01' = {
           value: storageAccountConnectionString
         }
         {
-          name: 'Settings__StorageAccountConnectionString'
-          value: storageAccountConnectionString
-        }
-        {
           name: 'WEBSITE_CONTENTSHARE'
           value: toLower(appName)
         }

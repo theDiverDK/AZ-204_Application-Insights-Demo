@@ -11,7 +11,8 @@ namespace Application_Insight.Controllers;
 
 class Product
 {
-    public string navn {
+    public string navn
+    {
         get;
         set;
     }
@@ -35,11 +36,8 @@ public class HomeController : Controller
 
     public IActionResult Privacy()
     {
-        var containerEndpoint = _config["Settings:StorageAccountConnectionString"];// ("https://sasaccount0702.blob.core.windows.net/demo");
-        if (containerEndpoint == null) {
-
-            ViewBag.data = "Cant find WEBSITE_CONTENTAZUREFILECONNECTIONSTRING";
-        }
+        var containerEndpoint = _config["WEBSITE_CONTENTAZUREFILECONNECTIONSTRING"] ?? "Cant find the config";// ("https://sasaccount0702.blob.core.windows.net/demo");
+        ViewBag.data = containerEndpoint;
         return View();
 
         var containerClient = new BlobContainerClient(new Uri(containerEndpoint), new DefaultAzureCredential());
@@ -54,7 +52,7 @@ public class HomeController : Controller
         var db = client.GetDatabase("ToDoList");
         var container = db.GetContainer("test");
 
-// Use SQL query language
+        // Use SQL query language
         FeedIterator<Product> iterator = container.GetItemQueryIterator<Product>(
             "SELECT * FROM c"
         );
@@ -63,14 +61,14 @@ public class HomeController : Controller
         // Iterate over results
         while (iterator.HasMoreResults)
         {
-               FeedResponse<Product> batch =  iterator.ReadNextAsync().GetAwaiter().GetResult();
-               foreach (Product item in batch)
-               {
-                   cosmosResult = cosmosResult + item.navn + ", ";
-               }
+            FeedResponse<Product> batch = iterator.ReadNextAsync().GetAwaiter().GetResult();
+            foreach (Product item in batch)
+            {
+                cosmosResult = cosmosResult + item.navn + ", ";
+            }
         }
 
-        
+
         ViewBag.sql = cosmosResult;
 
         return View();
