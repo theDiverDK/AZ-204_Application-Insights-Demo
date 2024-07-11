@@ -35,7 +35,12 @@ public class HomeController : Controller
 
     public IActionResult Privacy()
     {
-        var containerEndpoint = _config.GetConnectionString("StorageAccountConnectionString");// ("https://sasaccount0702.blob.core.windows.net/demo");
+        var containerEndpoint = _config["WEBSITE_CONTENTAZUREFILECONNECTIONSTRING"];// ("https://sasaccount0702.blob.core.windows.net/demo");
+        if (containerEndpoint == null) {
+
+            ViewBag.data = "Cant find WEBSITE_CONTENTAZUREFILECONNECTIONSTRING";
+            return;
+        }
 
         var containerClient = new BlobContainerClient(new Uri(containerEndpoint), new DefaultAzureCredential());
 

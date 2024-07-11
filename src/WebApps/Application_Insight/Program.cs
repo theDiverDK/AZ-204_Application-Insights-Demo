@@ -5,6 +5,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplicationInsightsTelemetry();
 
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+//load configuration from azure environment variables
+
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
