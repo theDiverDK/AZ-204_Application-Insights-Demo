@@ -46,28 +46,28 @@ public class HomeController : Controller
 
         ViewBag.data = result;
 
-        //var client = new CosmosClient(_config.GetConnectionString("CosmosDBConnectionString"));
-        //var db = client.GetDatabase("ToDoList");
-        //var container = db.GetContainer("test");
+        var client = new CosmosClient(_config.GetConnectionString("CosmosDBConnectionString"));
+        var db = client.GetDatabase("ToDoList");
+        var container = db.GetContainer("test");
 
-        //// Use SQL query language
-        //FeedIterator<Product> iterator = container.GetItemQueryIterator<Product>(
-        //    "SELECT * FROM c"
-        //);
+        // Use SQL query language
+        FeedIterator<Product> iterator = container.GetItemQueryIterator<Product>(
+            "SELECT * FROM c"
+        );
 
-        //var cosmosResult = "";
-        //// Iterate over results
-        //while (iterator.HasMoreResults)
-        //{
-        //    FeedResponse<Product> batch = iterator.ReadNextAsync().GetAwaiter().GetResult();
-        //    foreach (Product item in batch)
-        //    {
-        //        cosmosResult = cosmosResult + item.navn + ", ";
-        //    }
-        //}
+        var cosmosResult = "";
+        // Iterate over results
+        while (iterator.HasMoreResults)
+        {
+            FeedResponse<Product> batch = iterator.ReadNextAsync().GetAwaiter().GetResult();
+            foreach (Product item in batch)
+            {
+                cosmosResult = cosmosResult + item.navn + ", ";
+            }
+        }
 
 
-        //ViewBag.sql = cosmosResult;
+        ViewBag.sql = cosmosResult;
 
         return View();
     }
