@@ -34,7 +34,7 @@ resource webApp 'Microsoft.Web/sites@2023-01-01' = {
           value: storageAccountName
         }
         {
-          name: 'WEBSITE__CONTENTAZUREFILECONNECTIONSTRING'
+          name: 'Website__StorageAccountConnectionString'
           value: storageAccountConnectionString
         }
         {
