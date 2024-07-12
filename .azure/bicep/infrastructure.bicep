@@ -125,10 +125,10 @@ module cosmosDB 'cosmosDB.bicep' = {
 
 var appSettings = {
   Hello: 'World'
-  // APPINSIGHTS_INSTRUMENTATIONKEY: appInsight.outputs.instrumentationKey
-  // ApplicationInsightsAgent_EXTENSION_VERSION: '~2' // ~3 if linux
-  // XDT_MicrosoftApplicationInsights_Mode: 'recommended'
-  // APPLICATIONINSIGHTS_CONNECTION_STRING: appInsight.outputs.appInsightConnectionString
+  APPINSIGHTS_INSTRUMENTATIONKEY: appInsight.outputs.instrumentationKey
+  ApplicationInsightsAgent_EXTENSION_VERSION: '~2' // ~3 if linux
+  XDT_MicrosoftApplicationInsights_Mode: 'recommended'
+  APPLICATIONINSIGHTS_CONNECTION_STRING: appInsight.outputs.appInsightConnectionString
   // ConnectionStrings__StorageAccount: storageAccount.outputs.connectionString
   // ConnectionStrings__CosmosDB: cosmosDB.outputs.cosmosDBConnectionsString
   // Settings__StorageAccountContainerName: 'files'
@@ -145,7 +145,7 @@ module webAppSettings 'webAppSettings.bicep' = {
     appSettings: appSettings
   }
   dependsOn: [
-    webApp2
+    webApp2, appInsight
   ]
 }
 
