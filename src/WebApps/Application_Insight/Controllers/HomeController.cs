@@ -36,7 +36,11 @@ public class HomeController : Controller
 
     public IActionResult Privacy()
     {
-        var containerEndpoint = _config["WEBSITE_CONTENTAZUREFILECONNECTIONSTRING"];
+        var containerEndpoint = _config["ConnectionsStrings__StorageAccount"];
+        var cosmosConnectionsString = _config["ConnectionsStrings__CosmosDB"];
+
+        ViewBag.data = containerEndpoint + " - " + containerEndpoint;
+        return View();
 
         var containerClient = new BlobContainerClient(containerEndpoint, "files");
 

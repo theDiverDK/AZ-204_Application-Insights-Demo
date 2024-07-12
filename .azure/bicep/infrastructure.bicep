@@ -128,6 +128,8 @@ var appSettings = {
   ApplicationInsightsAgent_EXTENSION_VERSION: '~2' // ~3 if linux
   XDT_MicrosoftApplicationInsights_Mode: 'recommended'
   APPLICATIONINSIGHTS_CONNECTION_STRING: appInsight.outputs.appInsightConnectionString
+  ConnectionsStrings__StorageAccount: storageAccount.outputs.connectionString
+  ConnectionsStrings__CosmosDB: cosmosDB.outputs.cosmosDBConnectionsString
 }
 
 module webAppSettings 'webAppSettings.bicep' = {
