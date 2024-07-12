@@ -134,6 +134,7 @@ var appSettings = {
   Settings__StorageAccountContainerName: 'files'
   Settings__CosmosDBContainerName: cosmosDBContainerName
   Settings__CosmosDBDatabaseName: cosmosDBDatabaseName
+  ASPNETCORE_ENVIRONMENT: 'Development'
 
 }
 

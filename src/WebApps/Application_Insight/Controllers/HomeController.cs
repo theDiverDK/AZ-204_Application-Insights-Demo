@@ -40,8 +40,8 @@ public class HomeController : Controller
         var storageAccountContainerName = _config["Settings:StorageAccountContainerName"];
 
         var cosmosDBConnectionsString = _config["ConnectionStrings:CosmosDB"];
-        var cosmosDBDatabaseName = _config["Settings:CosmosDBDatabase"];
-        var cosmosDBContainerName = _config["Settings:CosmosDBContainer"];
+        var cosmosDBDatabaseName = _config["Settings:CosmosDBDatabaseName"];
+        var cosmosDBContainerName = _config["Settings:CosmosDBContainerName"];
 
         var containerClient = new BlobContainerClient(storageAccountConnectionString, storageAccountContainerName);
 
