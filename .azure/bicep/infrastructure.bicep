@@ -124,16 +124,19 @@ module cosmosDB 'cosmosDB.bicep' = {
   }
 }
 
-var appSettings = {
-  cosmosDBConnectionsString: cosmosDB.outputs.cosmosDBConnectionsString
-}
-module webAppSettings 'webAppSettings.bicep' = {
-  name: 'applyWebAppSettings'
-  params: {
-    webAppName: webAppName2
-    appSettings: appSettings
-  }
-}
+// var appSettings = [
+//   {
+//     name: 'cosmosDBConnectionsString'
+//     value: cosmosDB.outputs.cosmosDBConnectionsString
+//   }
+// ]
+// module webAppSettings 'webAppSettings.bicep' = {
+//   name: 'applyWebAppSettings'
+//   params: {
+//     webAppName: webAppName2
+//     appSettings: appSettings
+//   }
+// }
 
 
 output cosmosDBEndpoint string = cosmosDB.outputs.cosmosDBEndpoint

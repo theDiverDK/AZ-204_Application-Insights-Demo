@@ -1,13 +1,13 @@
 param webAppName string
-//param resourceGroupName string
 param appSettings object
+param currentAppSettings object
 
-resource webApp 'Microsoft.Web/sites@2023-12-01' existing = {
+resource webApp 'Microsoft.Web/sites@2022-03-01' existing = {
   name: webAppName
 }
 
-resource appSettingsResource 'Microsoft.Web/sites/config@2023-12-01' = {
+resource siteconfig 'Microsoft.Web/sites/config@2022-03-01' = {
   parent: webApp
   name: 'appsettings'
-  properties: appSettings
+  properties: union(currentAppSettings, appSettings)
 }
