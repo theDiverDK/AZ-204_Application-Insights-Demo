@@ -124,26 +124,33 @@ module cosmosDB 'cosmosDB.bicep' = {
 }
 
 var appSettings = {
-  APPINSIGHTS_INSTRUMENTATIONKEY: appInsight.outputs.instrumentationKey
-  ApplicationInsightsAgent_EXTENSION_VERSION: '~2' // ~3 if linux
-  XDT_MicrosoftApplicationInsights_Mode: 'recommended'
-  APPLICATIONINSIGHTS_CONNECTION_STRING: appInsight.outputs.appInsightConnectionString
-  ConnectionStrings__StorageAccount: storageAccount.outputs.connectionString
-  ConnectionStrings__CosmosDB: cosmosDB.outputs.cosmosDBConnectionsString
-  Settings__StorageAccountContainerName: 'files'
-  Settings__CosmosDBContainerName: cosmosDBContainerName
-  Settings__CosmosDBDatabaseName: cosmosDBDatabaseName
+  Hello: 'World'
+  // APPINSIGHTS_INSTRUMENTATIONKEY: appInsight.outputs.instrumentationKey
+  // ApplicationInsightsAgent_EXTENSION_VERSION: '~2' // ~3 if linux
+  // XDT_MicrosoftApplicationInsights_Mode: 'recommended'
+  // APPLICATIONINSIGHTS_CONNECTION_STRING: appInsight.outputs.appInsightConnectionString
+  // ConnectionStrings__StorageAccount: storageAccount.outputs.connectionString
+  // ConnectionStrings__CosmosDB: cosmosDB.outputs.cosmosDBConnectionsString
+  // Settings__StorageAccountContainerName: 'files'
+  // Settings__CosmosDBContainerName: cosmosDBContainerName
+  // Settings__CosmosDBDatabaseName: cosmosDBDatabaseName
 
 }
 
-module webAppSettings 'webAppSettings.bicep' = {
-  name: '${webAppName2}-settings'
-  params: {
-    webAppName: webAppName2
-    currentAppSettings: list(resourceId('Microsoft.Web/sites/config', webApp.name, 'appsettings'), '2022-03-01').properties
-    appSettings: appSettings
-  }
-}
+// module webAppSettings 'webAppSettings.bicep' = {
+//   name: '${webAppName2}-settings'
+//   params: {
+//     webAppName: webAppName2
+//     currentAppSettings: list(resourceId('Microsoft.Web/sites/config', webApp.name, 'appsettings'), '2022-03-01').properties
+//     appSettings: appSettings
+//   }
+// }
+
+
+
+output currentAppSettings object = list(resourceId('Microsoft.Web/sites/config', webApp2.name, 'appsettings'), '2022-03-01').properties
+
+
 
 output cosmosDBEndpoint string = cosmosDB.outputs.cosmosDBEndpoint
 output cosmosDBKey string = cosmosDB.outputs.cosmosDBMasterKey
