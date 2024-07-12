@@ -12,11 +12,6 @@
       //     value: toLower(appName)
       //   }
 
-      //   //The following 4 are needed to have Application Insight being enabled, and shown as such in the Portal
-      //   {
-      //     name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-      //     value: applicationInsightInstrumentationKey
-      //   }
       //   {
       //     name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
       //     value: applicationInsightConnectionString

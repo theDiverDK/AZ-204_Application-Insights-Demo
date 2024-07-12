@@ -65,4 +65,3 @@ resource webApp 'Microsoft.Web/sites@2023-01-01' = {
 }
 
 output systemPrincipalId string = webApp.identity.principalId
-output webAppId string=webApp.id

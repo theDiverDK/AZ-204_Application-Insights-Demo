@@ -86,7 +86,6 @@ module webApp2 'webApp.bicep' = {
   }
 }
 
-
 //Availability Test
 var availabilityTestName = 'availabilityTest'
 module availabilityTest 'availabilityTest.bicep' = {
@@ -124,11 +123,11 @@ module cosmosDB 'cosmosDB.bicep' = {
   }
 }
 
-var appSettings =  {
-    Hello: 'World'
-  }
+var appSettings = {
+  APPINSIGHTS_INSTRUMENTATIONKEY: appInsight.outputs.instrumentationKey
+}
 
-  module webAppSettings 'webAppSettings.bicep' = {
+module webAppSettings 'webAppSettings.bicep' = {
   name: '${webAppName2}-settings'
   params: {
     webAppName: webAppName2
@@ -136,7 +135,6 @@ var appSettings =  {
     appSettings: appSettings
   }
 }
-
 
 output cosmosDBEndpoint string = cosmosDB.outputs.cosmosDBEndpoint
 output cosmosDBKey string = cosmosDB.outputs.cosmosDBMasterKey
