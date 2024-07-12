@@ -36,8 +36,8 @@ public class HomeController : Controller
 
     public IActionResult Privacy()
     {
-        var containerEndpoint = _config["ConnectionsStrings__StorageAccount"];
-        var cosmosConnectionsString = _config["ConnectionsStrings__CosmosDB"];
+        var containerEndpoint = _config["ConnectionStrings:StorageAccount"];
+        var cosmosConnectionsString = _config["ConnectionStrings:CosmosDB"];
 
         ViewBag.data = containerEndpoint + " - " + containerEndpoint;
         return View();
