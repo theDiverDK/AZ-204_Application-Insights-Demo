@@ -124,19 +124,18 @@ module cosmosDB 'cosmosDB.bicep' = {
   }
 }
 
-// var appSettings = [
-//   {
-//     name: 'cosmosDBConnectionsString'
-//     value: cosmosDB.outputs.cosmosDBConnectionsString
-//   }
-// ]
-// module webAppSettings 'webAppSettings.bicep' = {
-//   name: 'applyWebAppSettings'
-//   params: {
-//     webAppName: webAppName2
-//     appSettings: appSettings
-//   }
-// }
+var appSettings =  {
+    Hello: 'World'
+  }
+
+  module webAppSettings 'webAppSettings.bicep' = {
+  name: '${webAppName2}-settings'
+  params: {
+    webAppName: webAppName2
+    currentAppSettings: list(resourceId('Microsoft.Web/sites/config', webApp.name, 'appsettings'), '2022-03-01').properties
+    appSettings: appSettings
+  }
+}
 
 
 output cosmosDBEndpoint string = cosmosDB.outputs.cosmosDBEndpoint
