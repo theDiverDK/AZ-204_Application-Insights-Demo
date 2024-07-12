@@ -51,7 +51,7 @@ public class HomeController : Controller
 
         ViewBag.data = result;
 
-        var client = new CosmosClient(cosmosDBConnectionsString));
+        var client = new CosmosClient(cosmosDBConnectionsString);
         var db = client.GetDatabase(cosmosDBDatabaseName);
         var container = db.GetContainer(cosmosDBContainerName);
 
