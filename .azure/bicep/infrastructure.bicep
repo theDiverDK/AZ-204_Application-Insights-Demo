@@ -63,11 +63,7 @@ module webApp 'webApp.bicep' = {
   params: {
     appName: webAppName
     farmId: plan.outputs.id
-    applicationInsightInstrumentationKey: appInsight.outputs.instrumentationKey
-    applicationInsightConnectionString: appInsight.outputs.appInsightConnectionString
     location: location
-    storageAccountConnectionString: storageAccount.outputs.connectionString
-    storageAccountName: storageAccount.outputs.name
   }
 }
 
@@ -78,11 +74,7 @@ module webApp2 'webApp.bicep' = {
   params: {
     appName: webAppName2
     farmId: plan.outputs.id
-    applicationInsightInstrumentationKey: appInsight.outputs.instrumentationKey
-    applicationInsightConnectionString: appInsight.outputs.appInsightConnectionString
     location: location
-    storageAccountConnectionString: storageAccount.outputs.connectionString
-    storageAccountName: storageAccount.outputs.name
   }
 }
 
@@ -137,6 +129,9 @@ var appSettings = {
   ASPNETCORE_ENVIRONMENT: 'Development'
 
 }
+
+output webAppName2 string = webAppName2
+output webAppName3 string = webApp2.name
 
 module webAppSettings 'webAppSettings.bicep' = {
   name: '${webAppName2}-settings'
