@@ -36,13 +36,14 @@ public class HomeController : Controller
 
     public IActionResult Privacy()
     {
-        var containerEndpoint = _config["ConnectionStrings:StorageAccount"];
-        var cosmosConnectionsString = _config["ConnectionStrings:CosmosDB"];
+        var storageAccountConnectionString = _config["ConnectionStrings:StorageAccount"];
+        var storageAccountContainerName = _config["Settings:StorageAccountContainerName"];
 
-        ViewBag.data = containerEndpoint + " - " + containerEndpoint;
-        return View();
+        var cosmosDBConnectionsString = _config["ConnectionStrings:CosmosDB"];
+        var cosmosDBDatabaseName = _config["Settings:CosmosDBDatabase"];
+        var cosmosDBContainerName = _config["Settings:CosmosDBContainer"];
 
-        var containerClient = new BlobContainerClient(containerEndpoint, "files");
+        var containerClient = new BlobContainerClient(storageAccountConnectionString, storageAccountContainerName);
 
         var data = containerClient.GetBlobs();
 
@@ -50,9 +51,9 @@ public class HomeController : Controller
 
         ViewBag.data = result;
 
-        var client = new CosmosClient(_config.GetConnectionString("CosmosDBConnectionString"));
-        var db = client.GetDatabase("ToDoList");
-        var container = db.GetContainer("test");
+        var client = new CosmosClient(cosmosDBConnectionsString));
+        var db = client.GetDatabase(cosmosDBDatabaseName);
+        var container = db.GetContainer(cosmosDBContainerName);
 
         // Use SQL query language
         FeedIterator<Product> iterator = container.GetItemQueryIterator<Product>(

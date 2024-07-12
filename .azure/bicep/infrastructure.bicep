@@ -130,6 +130,10 @@ var appSettings = {
   APPLICATIONINSIGHTS_CONNECTION_STRING: appInsight.outputs.appInsightConnectionString
   ConnectionStrings__StorageAccount: storageAccount.outputs.connectionString
   ConnectionStrings__CosmosDB: cosmosDB.outputs.cosmosDBConnectionsString
+  Settings__StorageAccountContainerName: 'files'
+  Settings__CosmosDBContainerName: cosmosDBContainerName
+  Settings__CosmosDBDatabaseName: cosmosDBDatabaseName
+
 }
 
 module webAppSettings 'webAppSettings.bicep' = {
