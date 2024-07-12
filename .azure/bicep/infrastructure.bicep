@@ -125,6 +125,13 @@ module cosmosDB 'cosmosDB.bicep' = {
 
 var appSettings = {
   APPINSIGHTS_INSTRUMENTATIONKEY: appInsight.outputs.instrumentationKey
+  ApplicationInsightsAgent_EXTENSION_VERSION: '~2' // ~3 if linux
+  XDT_MicrosoftApplicationInsights_Mode: 'recommended'
+
+  // {
+  //   name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+  //   value: applicationInsightConnectionString
+  // }
 }
 
 module webAppSettings 'webAppSettings.bicep' = {
