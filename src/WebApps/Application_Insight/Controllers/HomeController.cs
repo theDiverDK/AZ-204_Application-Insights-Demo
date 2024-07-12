@@ -1,11 +1,8 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Application_Insight.Models;
-using Azure.Identity;
 using Azure.Storage.Blobs;
-using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.Azure.Cosmos;
-using Microsoft.Data.SqlClient;
 
 namespace Application_Insight.Controllers;
 
@@ -70,7 +67,6 @@ public class HomeController : Controller
                 cosmosResult = cosmosResult + item.navn + ", ";
             }
         }
-
 
         ViewBag.sql = cosmosResult;
 
