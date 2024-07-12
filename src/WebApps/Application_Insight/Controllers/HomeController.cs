@@ -8,7 +8,7 @@ namespace Application_Insight.Controllers;
 
 class Product
 {
-    public string navn
+    public string Name
     {
         get;
         set;
@@ -64,7 +64,7 @@ public class HomeController : Controller
             FeedResponse<Product> batch = iterator.ReadNextAsync().GetAwaiter().GetResult();
             foreach (Product item in batch)
             {
-                cosmosResult = cosmosResult + item.navn + ", ";
+                cosmosResult = cosmosResult + item.Name + ", ";
             }
         }
 
