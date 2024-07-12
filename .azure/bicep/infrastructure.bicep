@@ -130,9 +130,6 @@ var appSettings = {
 
 }
 
-output webAppName2 string = webAppName2
-output webAppName3 string = webApp2.name
-
 module webAppSettings 'webAppSettings.bicep' = {
   name: '${webAppName2}-settings'
   params: {
@@ -144,12 +141,6 @@ module webAppSettings 'webAppSettings.bicep' = {
     webApp2, appInsight, storageAccount, cosmosDB
   ]
 }
-
-
-
-output currentAppSettings object = list(resourceId('Microsoft.Web/sites/config', webAppName2, 'appsettings'), '2022-03-01').properties
-
-
 
 output cosmosDBEndpoint string = cosmosDB.outputs.cosmosDBEndpoint
 output cosmosDBKey string = cosmosDB.outputs.cosmosDBMasterKey
