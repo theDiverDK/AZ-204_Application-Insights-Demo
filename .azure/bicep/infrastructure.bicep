@@ -137,18 +137,21 @@ var appSettings = {
 
 }
 
-// module webAppSettings 'webAppSettings.bicep' = {
-//   name: '${webAppName2}-settings'
-//   params: {
-//     webAppName: webAppName2
-//     currentAppSettings: list(resourceId('Microsoft.Web/sites/config', webApp.name, 'appsettings'), '2022-03-01').properties
-//     appSettings: appSettings
-//   }
-// }
+module webAppSettings 'webAppSettings.bicep' = {
+  name: '${webAppName2}-settings'
+  params: {
+    webAppName: webAppName2
+    currentAppSettings: list(resourceId('Microsoft.Web/sites/config', webAppName2, 'appsettings'), '2022-03-01').properties
+    appSettings: appSettings
+  }
+  dependsOn: [
+    webApp2
+  ]
+}
 
 
 
-output currentAppSettings object = list(resourceId('Microsoft.Web/sites/config', webApp2.name, 'appsettings'), '2022-03-01').properties
+output currentAppSettings object = list(resourceId('Microsoft.Web/sites/config', webAppName2, 'appsettings'), '2022-03-01').properties
 
 
 
