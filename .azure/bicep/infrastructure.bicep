@@ -138,14 +138,7 @@ module webAppSettings 'webAppSettings.bicep' = {
     appSettings: appSettings
   }
   dependsOn: [
-    webApp2,          // Ensure the web app is created
-    appInsight,       // Ensure Application Insights is created
-    storageAccount,   // Ensure the storage account is created
-    cosmosDB,         // Ensure CosmosDB is created
-    pingAlertRule,    // Ensure the ping alert rule is created
-    availabilityTest, // Ensure the availability test is created
-    availabilityTestActionGroup, // Ensure the action group is created
-    workspace         // Ensure the Log Analytics workspace is created
+    webApp2, appInsight, storageAccount, cosmosDB, pingAlertRule, availabilityTest, availabilityTestActionGroup, workspace
   ]
 }
 
