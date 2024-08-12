@@ -115,32 +115,32 @@ module cosmosDB 'cosmosDB.bicep' = {
   }
 }
 
-var appSettings = {
-  Hello: 'World'
-  APPINSIGHTS_INSTRUMENTATIONKEY: appInsight.outputs.instrumentationKey
-  ApplicationInsightsAgent_EXTENSION_VERSION: '~2' // ~3 if linux
-  XDT_MicrosoftApplicationInsights_Mode: 'recommended'
-  APPLICATIONINSIGHTS_CONNECTION_STRING: appInsight.outputs.appInsightConnectionString
-  ConnectionStrings__StorageAccount: storageAccount.outputs.connectionString
-  ConnectionStrings__CosmosDB: cosmosDB.outputs.cosmosDBConnectionsString
-  Settings__StorageAccountContainerName: 'files'
-  Settings__CosmosDBContainerName: cosmosDBContainerName
-  Settings__CosmosDBDatabaseName: cosmosDBDatabaseName
-  ASPNETCORE_ENVIRONMENT: 'Development'
+// var appSettings = {
+//   Hello: 'World'
+//   APPINSIGHTS_INSTRUMENTATIONKEY: appInsight.outputs.instrumentationKey
+//   ApplicationInsightsAgent_EXTENSION_VERSION: '~2' // ~3 if linux
+//   XDT_MicrosoftApplicationInsights_Mode: 'recommended'
+//   APPLICATIONINSIGHTS_CONNECTION_STRING: appInsight.outputs.appInsightConnectionString
+//   ConnectionStrings__StorageAccount: storageAccount.outputs.connectionString
+//   ConnectionStrings__CosmosDB: cosmosDB.outputs.cosmosDBConnectionsString
+//   Settings__StorageAccountContainerName: 'files'
+//   Settings__CosmosDBContainerName: cosmosDBContainerName
+//   Settings__CosmosDBDatabaseName: cosmosDBDatabaseName
+//   ASPNETCORE_ENVIRONMENT: 'Development'
 
-}
+// }
 
-module webAppSettings 'webAppSettings.bicep' = {
-  name: '${webAppName2}-settings'
-  params: {
-    webAppName: webAppName2
-    currentAppSettings: list(resourceId('Microsoft.Web/sites/config', webAppName2, 'appsettings'), '2022-03-01').properties
-    appSettings: appSettings
-  }
-  dependsOn: [
-    webApp2, appInsight, storageAccount, cosmosDB, pingAlertRule, availabilityTest, availabilityTestActionGroup, workspace
-  ]
-}
+// module webAppSettings 'webAppSettings.bicep' = {
+//   name: '${webAppName2}-settings'
+//   params: {
+//     webAppName: webAppName2
+//     currentAppSettings: list(resourceId('Microsoft.Web/sites/config', webAppName2, 'appsettings'), '2022-03-01').properties
+//     appSettings: appSettings
+//   }
+//   dependsOn: [
+//     webApp2, appInsight, storageAccount, cosmosDB, pingAlertRule, availabilityTest, availabilityTestActionGroup, workspace
+//   ]
+// }
 
 
 output cosmosDBEndpoint string = cosmosDB.outputs.cosmosDBEndpoint
