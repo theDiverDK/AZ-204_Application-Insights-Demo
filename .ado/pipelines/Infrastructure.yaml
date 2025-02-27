@@ -84,6 +84,10 @@ stages:
               pip install --upgrade pip
               pip install -r .ado/pipelines/python/CosmosDB/requirements.txt
               python .ado/pipelines/python/CosmosDB/seed.py --endpoint $(cosmosDBEndpoint) --key $(cosmosDBKey) --database $(cosmosDBDatabaseName) --container $(cosmosDBContainerName) --configdata .ado/pipelines/python/CosmosDB/ConfigData/
+          
+              # Cleanup virtual environment
+              deactivate
+              rm -rf venv_cosmosdb
             displayName: 'Seed CosmosDB using virtual environment'
 
           - script: |
@@ -93,6 +97,10 @@ stages:
               pip install --upgrade pip
               pip install -r .ado/pipelines/python/StorageAccount/requirements.txt
               python .ado/pipelines/python/StorageAccount/seed.py --connectionstring "$(storageAccountConnectionString)" --configdata ".ado/pipelines/python/StorageAccount/ConfigData/"
+          
+              # Cleanup virtual environment
+              deactivate
+              rm -rf venv_storage
             displayName: 'Seed StorageAccount using virtual environment'
 
          
