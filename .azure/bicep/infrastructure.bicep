@@ -264,15 +264,15 @@ resource diagStorageBlob 'Microsoft.Insights/diagnosticSettings@2021-05-01-previ
     workspaceId: workspace.outputs.id
     logs: [
       {
-        category: 'BlobRead'
+        category: 'StorageRead'
         enabled: true
       }
       {
-        category: 'BlobWrite'
+        category: 'StorageWrite'
         enabled: true
       }
       {
-        category: 'BlobDelete'
+        category: 'StorageDelete'
         enabled: true
       }
     ]
