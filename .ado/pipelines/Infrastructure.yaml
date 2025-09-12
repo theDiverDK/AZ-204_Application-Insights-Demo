@@ -75,8 +75,6 @@ stages:
                 }
 
           - powershell: |
-              echo "Extracting output variables from infrastructure deployment..."
-
               # Convert JSON-like string to a PowerShell object
               $variables = ConvertFrom-Json '$(infrastructureAsCodeOutputs)'
 
@@ -98,31 +96,23 @@ stages:
     displayName: 'Seed CosmosDB and StorageAccount'
     dependsOn: 'Deploy_Infrastructure_stage'
     variables:
-      keyVaultName: '$(appName)-$(environment)-kv'
-      cosmosDBDatabaseName: '$(appName)-$(environment)-database'
-      cosmosDBContainerName: '$(appName)-$(environment)-container'
+      cosmosDBEndpoint: $[ stageDependencies.Deploy_Infrastructure_stage.Deploy_Infrastructure_jobs.outputs['powershell.cosmosDBEndpoint'] ]
+      cosmosDBKey: $[ stageDependencies.Deploy_Infrastructure_stage.Deploy_Infrastructure_jobs.outputs['powershell.cosmosDBKey'] ]
+      cosmosDBContainerName: $[ stageDependencies.Deploy_Infrastructure_stage.Deploy_Infrastructure_jobs.outputs['powershell.cosmosDBContainerName'] ]
+      cosmosDBDatabaseName: $[ stageDependencies.Deploy_Infrastructure_stage.Deploy_Infrastructure_jobs.outputs['powershell.cosmosDBDatabaseName'] ]
+      storageAccountConnectionString: $[ stageDependencies.Deploy_Infrastructure_stage.Deploy_Infrastructure_jobs.outputs['powershell.storageAccountConnectionString'] ]
 
     jobs:
       - job:
         steps:
-          - task: AzureKeyVault@2
-            displayName: 'Fetch secrets from Key Vault'
-            inputs:
-              azureSubscription: '$(azureServiceConnectionName)'
-              KeyVaultName: '$(keyVaultName)'
-              SecretsFilter: 'CosmosConnectionString,StorageConnectionString'
           - script: |
               # Create and activate virtual environment for CosmosDB
               python3 -m venv venv_cosmosdb
               source venv_cosmosdb/bin/activate
               pip install --upgrade pip
               pip install -r .ado/pipelines/python/CosmosDB/requirements.txt
-
-              python .ado/pipelines/python/CosmosDB/seed.py \
-                --connectionstring "$(CosmosConnectionString)" \
-                --database "$(cosmosDBDatabaseName)" \
-                --container "$(cosmosDBContainerName)" \
-                --configdata .ado/pipelines/python/CosmosDB/ConfigData/
+              python .ado/pipelines/python/CosmosDB/seed.py --endpoint $(cosmosDBEndpoint) --key $(cosmosDBKey) --database $(cosmosDBDatabaseName) --container $(cosmosDBContainerName) --configdata .ado/pipelines/python/CosmosDB/ConfigData/
+          
               # Cleanup virtual environment
               deactivate
               rm -rf venv_cosmosdb
@@ -134,16 +124,14 @@ stages:
               source venv_storage/bin/activate
               pip install --upgrade pip
               pip install -r .ado/pipelines/python/StorageAccount/requirements.txt
-              python .ado/pipelines/python/StorageAccount/seed.py \
-                --connectionstring "$(StorageConnectionString)" \
-                --configdata ".ado/pipelines/python/StorageAccount/ConfigData/"
+              python .ado/pipelines/python/StorageAccount/seed.py --connectionstring "$(storageAccountConnectionString)" --configdata ".ado/pipelines/python/StorageAccount/ConfigData/"
           
               # Cleanup virtual environment
               deactivate
               rm -rf venv_storage
             displayName: 'Seed StorageAccount using virtual environment'
 
-         
+
   - stage: 
     displayName: 'Build/Depoy WebApplication1 webapp'
     # dependsOn: 'Deploy_Infrastructure_stage'
