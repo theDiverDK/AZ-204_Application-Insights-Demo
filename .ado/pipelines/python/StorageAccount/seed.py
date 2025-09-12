@@ -1,43 +1,23 @@
 from azure.storage.blob import BlobServiceClient
-from azure.identity import DefaultAzureCredential
-from azure.keyvault.secrets import SecretClient
 import argparse
 import os
 
-parser = argparse.ArgumentParser(description='Seed Azure Blob Storage with config data')
+parser = argparse.ArgumentParser(description='Process some integers.')
 parser.add_argument('--connectionstring', type=str, help='Azure Blob Storage connection string')
-parser.add_argument('--keyvault-name', type=str, help='Key Vault name (to fetch connection string)')
-parser.add_argument('--secret-name', type=str, default='StorageConnectionString', help='Secret name holding the Storage connection string')
-parser.add_argument('--configdata', type=str, required=True, help='ConfigData folder path')
+parser.add_argument('--configdata', type=str, help='ConfigData folder path')
 
 args = parser.parse_args()
+CONNECTION_STRING = args.connectionstring
 CONFIG_DATA_DIR = args.configdata
-
-def _resolve_connection_string() -> str:
-    # Priority: explicit arg > Key Vault > env var
-    if args.connectionstring:
-        return args.connectionstring
-    if args.keyvault_name:
-        kv_name = args.keyvault_name
-        secret_name = args.secret_name
-        if not kv_name:
-            raise RuntimeError('Key Vault name not provided. Use --keyvault-name <name>.')
-        credential = DefaultAzureCredential()
-        kv_uri = f"https://{kv_name}.vault.azure.net/"
-        client = SecretClient(vault_url=kv_uri, credential=credential)
-        secret = client.get_secret(secret_name)
-        return secret.value
-    env_cs = os.getenv('STORAGE_CONNECTION_STRING')
-    if env_cs:
-        return env_cs
-    raise RuntimeError('Storage connection string not provided. Pass --connectionstring, or --keyvault-name/--secret-name, or set STORAGE_CONNECTION_STRING.')
+print(f"CONNECTION_STRING: '{CONNECTION_STRING}'")
+print(f"CONFIG_DATA_DIR: '{CONFIG_DATA_DIR}'")
 
 def upload_blob(container_client, blob_name, data):
     blob_client = container_client.get_blob_client(blob_name)
     blob_client.upload_blob(data, overwrite=True)
 
 def get_container_client(container_name):
-    blob_service_client = BlobServiceClient.from_connection_string(_resolve_connection_string())
+    blob_service_client = BlobServiceClient.from_connection_string(CONNECTION_STRING)
     container_client = blob_service_client.get_container_client(container_name)
 
     if not container_client.exists():

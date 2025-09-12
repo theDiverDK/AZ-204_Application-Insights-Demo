@@ -1,44 +1,22 @@
 from azure.cosmos import exceptions, CosmosClient, PartitionKey
-from azure.identity import DefaultAzureCredential
-from azure.keyvault.secrets import SecretClient
 import argparse
 import os
 import json
 
-parser = argparse.ArgumentParser(description='Seed Cosmos DB with config data')
-parser.add_argument('--connectionstring', type=str, help='Cosmos DB connection string')
-parser.add_argument('--keyvault-name', type=str, help='Key Vault name (to fetch connection string)')
-parser.add_argument('--secret-name', type=str, default='CosmosConnectionString', help='Secret name holding the Cosmos connection string')
-parser.add_argument('--database', type=str, required=True, help='Cosmos DB database name')
-parser.add_argument('--container', type=str, required=True, help='Cosmos DB container name')
-parser.add_argument('--configdata', type=str, required=True, help='ConfigData folder path')
+parser = argparse.ArgumentParser(description='Process some integers.')
+parser.add_argument('--endpoint', type=str, help='Cosmos DB endpoint')
+parser.add_argument('--key', type=str, help='Cosmos DB key')
+parser.add_argument('--database', type=str, help='Cosmos DB database name')
+parser.add_argument('--container', type=str, help='Cosmos DB container name')
+parser.add_argument('--configdata', type=str, help='ConfigData folder path')
 
 args = parser.parse_args()
+HOST = args.endpoint
+MASTER_KEY = args.key
 DATABASE_ID = args.database
 CONTAINER_ID = args.container
 CONFIG_DATA_DIR = args.configdata
-
-def _resolve_connection_string() -> str:
-    # Priority: explicit arg > Key Vault > env var
-    if args.connectionstring:
-        return args.connectionstring
-    if args.keyvault_name:
-        # argparse maps '--keyvault-name' to keyvault_name
-        kv_name = args.keyvault_name
-        secret_name = args.secret_name
-        if not kv_name:
-            raise RuntimeError('Key Vault name not provided. Use --keyvault-name <name>.')
-        credential = DefaultAzureCredential()
-        kv_uri = f"https://{kv_name}.vault.azure.net/"
-        client = SecretClient(vault_url=kv_uri, credential=credential)
-        secret = client.get_secret(secret_name)
-        return secret.value
-    env_cs = os.getenv('COSMOS_CONNECTION_STRING')
-    if env_cs:
-        return env_cs
-    raise RuntimeError('Cosmos connection string not provided. Pass --connectionstring, or --keyvault-name/--secret-name, or set COSMOS_CONNECTION_STRING.')
-
-
+ 
 def upsert_config_item(container, config_doc):
     """Upserts config item to the appropriate container"""
     try:
@@ -50,10 +28,8 @@ def upsert_config_item(container, config_doc):
 
 
 def get_cosmos_client():
-    """Gets Cosmos client using a connection string"""
-    conn_str = _resolve_connection_string()
-    # azure-cosmos supports creating client from connection string
-    return CosmosClient.from_connection_string(conn_str)
+    """Gets Cosmos client to connect to the database"""
+    return CosmosClient(HOST, {'masterKey': MASTER_KEY})
 
 
 def get_cosmos_database(client):

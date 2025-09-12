@@ -135,8 +135,8 @@ var appSettings = {
   ApplicationInsightsAgent_EXTENSION_VERSION: '~2' // ~3 if linux
   XDT_MicrosoftApplicationInsights_Mode: 'recommended'
   APPLICATIONINSIGHTS_CONNECTION_STRING: appInsight.outputs.appInsightConnectionString
-  ConnectionStrings__StorageAccount: '@Microsoft.KeyVault(SecretUri=${keyVault.outputs.vaultUri}secrets/StorageConnectionString)'
-  ConnectionStrings__CosmosDB: '@Microsoft.KeyVault(SecretUri=${keyVault.outputs.vaultUri}secrets/CosmosConnectionString)'
+  ConnectionStrings__StorageAccount: storageAccount.outputs.connectionString
+  ConnectionStrings__CosmosDB: cosmosDB.outputs.cosmosDBConnectionsString
   Settings__StorageAccountContainerName: 'files'
   Settings__CosmosDBContainerName: cosmosDBContainerName
   Settings__CosmosDBDatabaseName: cosmosDBDatabaseName
@@ -172,6 +172,9 @@ module webApp1Settings 'webAppSettings.bicep' = {
 
 output cosmosDBDatabaseName string = cosmosDB.outputs.cosmosDBDatabaseName
 output cosmosDBContainerName string = cosmosDB.outputs.cosmosDBContainerName
+output cosmosDBEndpoint string = cosmosDB.outputs.cosmosDBEndpoint
+output cosmosDBKey string = cosmosDB.outputs.cosmosDBMasterKey
+output storageAccountConnectionString string = storageAccount.outputs.connectionString
 
 // Sensitive outputs removed: use Key Vault or MI/RBAC for secrets
 
