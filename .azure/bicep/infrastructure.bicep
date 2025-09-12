@@ -154,6 +154,19 @@ module webAppSettings 'webAppSettings.bicep' = {
   ]
 }
 
+// Apply same Key Vault–backed settings to the primary web app
+module webApp1Settings 'webAppSettings.bicep' = {
+  name: '${webAppName}-settings'
+  params: {
+    webAppName: webAppName
+    currentAppSettings: list(resourceId('Microsoft.Web/sites/config', webAppName, 'appsettings'), '2023-01-01').properties
+    appSettings: appSettings
+  }
+  dependsOn: [
+    webApp
+  ]
+}
+
 
 output cosmosDBDatabaseName string = cosmosDB.outputs.cosmosDBDatabaseName
 output cosmosDBContainerName string = cosmosDB.outputs.cosmosDBContainerName
@@ -186,6 +199,16 @@ module raKvSecretsUser 'rbac.bicep' = {
   name: 'ra-kv-secrets-user'
   params: {
     identityId: webApp2.outputs.systemPrincipalId
+    roleNameGuid: '4633458b-17de-408a-b874-0445c86b69e6' // Key Vault Secrets User
+    keyVaultName: keyVaultName
+  }
+}
+
+// Grant the primary web app access to Key Vault secrets via RBAC
+module raKvSecretsUserApp1 'rbac.bicep' = {
+  name: 'ra-kv-secrets-user-app1'
+  params: {
+    identityId: webApp.outputs.systemPrincipalId
     roleNameGuid: '4633458b-17de-408a-b874-0445c86b69e6' // Key Vault Secrets User
     keyVaultName: keyVaultName
   }
