@@ -84,8 +84,8 @@ stages:
               source venv_cosmosdb/bin/activate
               pip install --upgrade pip
               pip install -r .ado/pipelines/python/CosmosDB/requirements.txt
-              python .ado/pipelines/python/CosmosDB/seed.py --endpoint $(cosmosDBEndpoint) --key $(cosmosDBKey) --database $(cosmosDBDatabaseName) --container $(cosmosDBContainerName) --configdata .ado/pipelines/python/CosmosDB/ConfigData/
-          
+
+              python .ado/pipelines/python/CosmosDB/seed.py --keyvault-name $(keyVaultName) --database $(cosmosDBDatabaseName) --container $(cosmosDBContainerName) --configdata .ado/pipelines/python/CosmosDB/ConfigData/          
               # Cleanup virtual environment
               deactivate
               rm -rf venv_cosmosdb
@@ -97,7 +97,7 @@ stages:
               source venv_storage/bin/activate
               pip install --upgrade pip
               pip install -r .ado/pipelines/python/StorageAccount/requirements.txt
-              python .ado/pipelines/python/StorageAccount/seed.py --connectionstring "$(storageAccountConnectionString)" --configdata ".ado/pipelines/python/StorageAccount/ConfigData/"
+              python .ado/pipelines/python/StorageAccount/seed.py --keyvault-name $(keyVaultName) --configdata ".ado/pipelines/python/StorageAccount/ConfigData/"
           
               # Cleanup virtual environment
               deactivate
