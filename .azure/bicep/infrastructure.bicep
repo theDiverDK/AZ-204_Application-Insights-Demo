@@ -3,6 +3,7 @@ targetScope = 'resourceGroup'
 param appName string
 param env string
 param location string = resourceGroup().location
+param availabilityTestEnabled bool = true
 
 //Log Analytic Workspace
 var logAnalyticName = '${appName}-${env}-log'
@@ -32,6 +33,16 @@ module storageAccount 'storageAccount.bicep' = {
   params: {
     location: location
     storageAccountName: storageAccountName
+  }
+}
+
+// Key Vault for secrets
+var keyVaultName = '${appName}-${env}-kv'
+module keyVault 'keyVault.bicep' = {
+  name: keyVaultName
+  params: {
+    keyVaultName: keyVaultName
+    location: location
   }
 }
 
@@ -87,6 +98,7 @@ module availabilityTest 'availabilityTest.bicep' = {
     applicationInsightId: appInsight.outputs.applicationInsightId
     location: location
     availabilityTestUrl: '${webAppName}.azurewebsites.net' //works since we dont use custom domains.
+    enabled: availabilityTestEnabled
   }
 }
 
@@ -121,8 +133,8 @@ var appSettings = {
   ApplicationInsightsAgent_EXTENSION_VERSION: '~2' // ~3 if linux
   XDT_MicrosoftApplicationInsights_Mode: 'recommended'
   APPLICATIONINSIGHTS_CONNECTION_STRING: appInsight.outputs.appInsightConnectionString
-  ConnectionStrings__StorageAccount: storageAccount.outputs.connectionString
-  ConnectionStrings__CosmosDB: cosmosDB.outputs.cosmosDBConnectionsString
+  ConnectionStrings__StorageAccount: '@Microsoft.KeyVault(SecretUri=${keyVault.outputs.vaultUri}secrets/StorageConnectionString)'
+  ConnectionStrings__CosmosDB: '@Microsoft.KeyVault(SecretUri=${keyVault.outputs.vaultUri}secrets/CosmosConnectionString)'
   Settings__StorageAccountContainerName: 'files'
   Settings__CosmosDBContainerName: cosmosDBContainerName
   Settings__CosmosDBDatabaseName: cosmosDBDatabaseName
@@ -134,21 +146,126 @@ module webAppSettings 'webAppSettings.bicep' = {
   name: '${webAppName2}-settings'
   params: {
     webAppName: webAppName2
-    currentAppSettings: list(resourceId('Microsoft.Web/sites/config', webAppName2, 'appsettings'), '2022-03-01').properties
+    currentAppSettings: list(resourceId('Microsoft.Web/sites/config', webAppName2, 'appsettings'), '2023-01-01').properties
     appSettings: appSettings
   }
   dependsOn: [
-    webApp2, appInsight, storageAccount, cosmosDB, pingAlertRule, availabilityTest, availabilityTestActionGroup, workspace
+    webApp2
   ]
 }
 
 
-output cosmosDBEndpoint string = cosmosDB.outputs.cosmosDBEndpoint
-output cosmosDBKey string = cosmosDB.outputs.cosmosDBMasterKey
 output cosmosDBDatabaseName string = cosmosDB.outputs.cosmosDBDatabaseName
 output cosmosDBContainerName string = cosmosDB.outputs.cosmosDBContainerName
 
-output storageAccountConnectionString string = storageAccount.outputs.connectionString
+// Sensitive outputs removed: use Key Vault or MI/RBAC for secrets
+
+// Store secrets in Key Vault
+module storageConnSecret 'keyVaultSecret.bicep' = {
+  name: 'kv-StorageConnectionString'
+  params: {
+    keyVaultName: keyVaultName
+    secretName: 'StorageConnectionString'
+    secretValue: storageAccount.outputs.connectionString
+  }
+  dependsOn: [keyVault, storageAccount]
+}
+
+module cosmosConnSecret 'keyVaultSecret.bicep' = {
+  name: 'kv-CosmosConnectionString'
+  params: {
+    keyVaultName: keyVaultName
+    secretName: 'CosmosConnectionString'
+    secretValue: cosmosDB.outputs.cosmosDBConnectionsString
+  }
+  dependsOn: [keyVault, cosmosDB]
+}
+
+// Grant Web App access to Key Vault secrets via RBAC
+module raKvSecretsUser 'rbac.bicep' = {
+  name: 'ra-kv-secrets-user'
+  params: {
+    identityId: webApp2.outputs.systemPrincipalId
+    roleNameGuid: '4633458b-17de-408a-b874-0445c86b69e6' // Key Vault Secrets User
+    scope: keyVault.outputs.keyVaultId
+  }
+  dependsOn: [keyVault, webApp2]
+}
+
+// Diagnostics: send logs/metrics to Log Analytics
+resource webAppExisting 'Microsoft.Web/sites@2023-01-01' existing = {
+  name: webAppName2
+}
+
+resource diagWebApp 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: '${webAppName2}-diag'
+  scope: webAppExisting
+  properties: {
+    workspaceId: workspace.outputs.id
+    logs: [
+      {
+        category: 'AppServiceHTTPLogs'
+        enabled: true
+      }
+      {
+        category: 'AppServiceConsoleLogs'
+        enabled: true
+      }
+      {
+        category: 'AppServiceAppLogs'
+        enabled: true
+      }
+      {
+        category: 'AppServiceAuditLogs'
+        enabled: true
+      }
+      {
+        category: 'AppServicePlatformLogs'
+        enabled: true
+      }
+    ]
+    metrics: [
+      {
+        category: 'AllMetrics'
+        enabled: true
+      }
+    ]
+  }
+  dependsOn: [webApp2, workspace]
+}
+
+resource storageExisting 'Microsoft.Storage/storageAccounts@2023-01-01' existing = {
+  name: storageAccountName
+}
+
+resource diagStorage 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: '${storageAccountName}-diag'
+  scope: storageExisting
+  properties: {
+    workspaceId: workspace.outputs.id
+    logs: [
+      {
+        category: 'StorageRead'
+        enabled: true
+      }
+      {
+        category: 'StorageWrite'
+        enabled: true
+      }
+      {
+        category: 'StorageDelete'
+        enabled: true
+      }
+    ]
+    metrics: [
+      {
+        category: 'AllMetrics'
+        enabled: true
+      }
+    ]
+  }
+  dependsOn: [storageAccount, workspace]
+}
 
 // Setup three Role Assignments on the Storage Account for 
 // the function app's Managed identity

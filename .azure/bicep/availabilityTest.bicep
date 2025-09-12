@@ -2,6 +2,7 @@ param availabilityTestName string
 param location string
 param applicationInsightId string
 param availabilityTestUrl string
+param enabled bool = true
 
 resource availabilityTest 'Microsoft.Insights/webtests@2022-06-15' = {
   name: availabilityTestName
@@ -11,7 +12,7 @@ resource availabilityTest 'Microsoft.Insights/webtests@2022-06-15' = {
     'hidden-link:${applicationInsightId}': 'Resource'
   }
   properties: {
-    Enabled: false //will be set to enabled, when the web app it monitors is deployed
+    Enabled: enabled
     Frequency: 300
     Timeout: 120
     Kind: 'standard'
