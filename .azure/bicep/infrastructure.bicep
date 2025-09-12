@@ -242,16 +242,37 @@ resource diagStorage 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' 
   scope: storageExisting
   properties: {
     workspaceId: workspace.outputs.id
-    logs: [
-      {
-        // Use category group to cover all supported storage logs
-        categoryGroup: 'allLogs'
-        enabled: true
-      }
-    ]
     metrics: [
       {
         category: 'AllMetrics'
+        enabled: true
+      }
+    ]
+  }
+  dependsOn: [storageAccount]
+}
+
+// Blob service diagnostics: enable logs at blob service scope
+resource blobServiceExisting 'Microsoft.Storage/storageAccounts/blobServices@2023-01-01' existing = {
+  name: '${storageAccountName}/default'
+}
+
+resource diagStorageBlob 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: '${storageAccountName}-blob-diag'
+  scope: blobServiceExisting
+  properties: {
+    workspaceId: workspace.outputs.id
+    logs: [
+      {
+        category: 'BlobRead'
+        enabled: true
+      }
+      {
+        category: 'BlobWrite'
+        enabled: true
+      }
+      {
+        category: 'BlobDelete'
         enabled: true
       }
     ]
