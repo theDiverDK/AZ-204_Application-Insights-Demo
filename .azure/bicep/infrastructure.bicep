@@ -168,7 +168,7 @@ module storageConnSecret 'keyVaultSecret.bicep' = {
     secretName: 'StorageConnectionString'
     secretValue: storageAccount.outputs.connectionString
   }
-  dependsOn: [keyVault, storageAccount]
+  dependsOn: [keyVault]
 }
 
 module cosmosConnSecret 'keyVaultSecret.bicep' = {
@@ -178,7 +178,7 @@ module cosmosConnSecret 'keyVaultSecret.bicep' = {
     secretName: 'CosmosConnectionString'
     secretValue: cosmosDB.outputs.cosmosDBConnectionsString
   }
-  dependsOn: [keyVault, cosmosDB]
+  dependsOn: [keyVault]
 }
 
 // Grant Web App access to Key Vault secrets via RBAC
@@ -187,9 +187,8 @@ module raKvSecretsUser 'rbac.bicep' = {
   params: {
     identityId: webApp2.outputs.systemPrincipalId
     roleNameGuid: '4633458b-17de-408a-b874-0445c86b69e6' // Key Vault Secrets User
-    scope: keyVault.outputs.keyVaultId
+    keyVaultName: keyVaultName
   }
-  dependsOn: [keyVault, webApp2]
 }
 
 // Diagnostics: send logs/metrics to Log Analytics
@@ -197,7 +196,7 @@ resource webAppExisting 'Microsoft.Web/sites@2023-01-01' existing = {
   name: webAppName2
 }
 
-resource diagWebApp 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+resource diagWebApp 'Microsoft.Insights/diagnosticSettings@2021-05-01' = {
   name: '${webAppName2}-diag'
   scope: webAppExisting
   properties: {
@@ -231,14 +230,14 @@ resource diagWebApp 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' =
       }
     ]
   }
-  dependsOn: [webApp2, workspace]
+  dependsOn: [webApp2]
 }
 
 resource storageExisting 'Microsoft.Storage/storageAccounts@2023-01-01' existing = {
   name: storageAccountName
 }
 
-resource diagStorage 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+resource diagStorage 'Microsoft.Insights/diagnosticSettings@2021-05-01' = {
   name: '${storageAccountName}-diag'
   scope: storageExisting
   properties: {
@@ -264,7 +263,7 @@ resource diagStorage 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' 
       }
     ]
   }
-  dependsOn: [storageAccount, workspace]
+  dependsOn: [storageAccount]
 }
 
 // Setup three Role Assignments on the Storage Account for 
