@@ -244,15 +244,8 @@ resource diagStorage 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' 
     workspaceId: workspace.outputs.id
     logs: [
       {
-        category: 'StorageRead'
-        enabled: true
-      }
-      {
-        category: 'StorageWrite'
-        enabled: true
-      }
-      {
-        category: 'StorageDelete'
+        // Use category group to cover all supported storage logs
+        categoryGroup: 'allLogs'
         enabled: true
       }
     ]
