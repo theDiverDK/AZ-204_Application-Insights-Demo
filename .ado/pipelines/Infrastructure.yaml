@@ -46,6 +46,7 @@ stages:
               deploymentOutputs: infrastructureAsCodeOutputs
 
           - powershell: |
+              echo "Extracting output variables from infrastructure deployment..."
 
               # Convert JSON-like string to a PowerShell object
               $variables = ConvertFrom-Json '$(infrastructureAsCodeOutputs)'
