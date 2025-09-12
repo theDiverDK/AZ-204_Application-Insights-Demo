@@ -39,12 +39,41 @@ stages:
               connectedServiceName: $(azureServiceConnectionName)
               location: $(location)
               resourceGroupName: $(resourceGroupName)
+              deploymentName: infrastructure-$(Build.BuildId)
               csmFile: .azure/bicep/infrastructure.bicep
               overrideParameters: 
                 -appName $(appName)
                 -env $(environment)
                 -pipelineSpObjectId $(serviceConnectionObjectId)
               deploymentOutputs: infrastructureAsCodeOutputs
+
+          - task: AzureCLI@2
+            displayName: 'Show failed deployment operations (if any)'
+            condition: failed()
+            inputs:
+              azureSubscription: '$(azureServiceConnectionName)'
+              scriptType: pscore
+              scriptLocation: inlineScript
+              inlineScript: |
+                Write-Host "Fetching failed operations for deployment infrastructure-$(Build.BuildId) in RG $(resourceGroupName)"
+                az deployment group show -g $(resourceGroupName) -n infrastructure-$(Build.BuildId) -o jsonc || true
+                Write-Host "--- Failed operations:"
+                $failed = az deployment group operation list -g $(resourceGroupName) -n infrastructure-$(Build.BuildId) --query "[?properties.provisioningState=='Failed']" -o json | ConvertFrom-Json
+                if (-not $failed) { Write-Host "No failed operations found"; exit 0 }
+                $failed | ForEach-Object {
+                  Write-Host ("opId: {0}" -f $_.operationId)
+                  Write-Host ("resource: {0}" -f $_.properties.targetResource.id)
+                  Write-Host ("statusCode: {0}" -f $_.properties.statusCode)
+                  $err = $_.properties.statusMessage.error
+                  if ($err) {
+                    Write-Host ("code: {0}" -f $err.code)
+                    Write-Host ("message: {0}" -f $err.message)
+                    if ($err.details) { $err.details | ForEach-Object { Write-Host (" detail: {0}: {1}" -f $_.code, $_.message) } }
+                  } else {
+                    Write-Host ("statusMessage: {0}" -f ($_.properties.statusMessage | ConvertTo-Json -Depth 10))
+                  }
+                  Write-Host "---"
+                }
 
           - powershell: |
               echo "Extracting output variables from infrastructure deployment..."
