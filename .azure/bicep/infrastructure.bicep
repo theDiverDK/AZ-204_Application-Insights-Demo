@@ -196,7 +196,7 @@ resource webAppExisting 'Microsoft.Web/sites@2023-01-01' existing = {
   name: webAppName2
 }
 
-resource diagWebApp 'Microsoft.Insights/diagnosticSettings@2021-05-01' = {
+resource diagWebApp 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: '${webAppName2}-diag'
   scope: webAppExisting
   properties: {
@@ -237,7 +237,7 @@ resource storageExisting 'Microsoft.Storage/storageAccounts@2023-01-01' existing
   name: storageAccountName
 }
 
-resource diagStorage 'Microsoft.Insights/diagnosticSettings@2021-05-01' = {
+resource diagStorage 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: '${storageAccountName}-diag'
   scope: storageExisting
   properties: {
