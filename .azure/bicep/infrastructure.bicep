@@ -4,6 +4,8 @@ param appName string
 param env string
 param location string = resourceGroup().location
 param availabilityTestEnabled bool = true
+@description('Optional: Object ID of the Azure DevOps service connection principal to grant Key Vault Secrets User. Leave empty to skip.')
+param pipelineSpObjectId string = ''
 
 //Log Analytic Workspace
 var logAnalyticName = '${appName}-${env}-log'
@@ -199,6 +201,16 @@ module raKvSecretsUser 'rbac.bicep' = {
   name: 'ra-kv-secrets-user'
   params: {
     identityId: webApp2.outputs.systemPrincipalId
+    roleNameGuid: '4633458b-17de-408a-b874-0445c86b69e6' // Key Vault Secrets User
+    keyVaultName: keyVaultName
+  }
+}
+
+// Optionally grant the Azure DevOps service connection access to Key Vault secrets via RBAC
+module raKvSecretsUserPipeline 'rbac.bicep' = if (pipelineSpObjectId != '') {
+  name: 'ra-kv-secrets-user-pipeline'
+  params: {
+    identityId: pipelineSpObjectId
     roleNameGuid: '4633458b-17de-408a-b874-0445c86b69e6' // Key Vault Secrets User
     keyVaultName: keyVaultName
   }

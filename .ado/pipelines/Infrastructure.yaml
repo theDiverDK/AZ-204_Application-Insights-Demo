@@ -43,6 +43,7 @@ stages:
               overrideParameters: 
                 -appName $(appName)
                 -env $(environment)
+                -pipelineSpObjectId $(serviceConnectionObjectId)
               deploymentOutputs: infrastructureAsCodeOutputs
 
           - powershell: |
