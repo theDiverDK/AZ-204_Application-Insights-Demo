@@ -8,7 +8,7 @@ trigger: none
 #      - .azure/*
 
 pool:
-  name: 'Minecraft server 2'
+ # name: 'Minecraft server 2'
   vmImage: 'ubuntu-latest'
 
 variables:
