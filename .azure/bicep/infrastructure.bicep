@@ -69,8 +69,7 @@ module webApp 'webApp.bicep' = {
 
 //Web App
 var webAppName2 = 'appinsight-${env}-app'
-var appSettingsResourceId = resourceId('Microsoft.Web/sites/config', webAppName2, 'appsettings')
-var existingAppSettings = try(list(appSettingsResourceId, '2022-03-01').properties, {})
+var existingAppSettings = {}
 module webApp2 'webApp.bicep' = {
   name: webAppName2
   params: {
