@@ -69,6 +69,8 @@ module webApp 'webApp.bicep' = {
 
 //Web App
 var webAppName2 = 'appinsight-${env}-app'
+var appSettingsResourceId = resourceId('Microsoft.Web/sites/config', webAppName2, 'appsettings')
+var existingAppSettings = resourceExists('Microsoft.Web/sites/config', webAppName2, 'appsettings') ? list(appSettingsResourceId, '2022-03-01').properties : {}
 module webApp2 'webApp.bicep' = {
   name: webAppName2
   params: {
@@ -134,7 +136,7 @@ module webAppSettings 'webAppSettings.bicep' = {
   name: '${webAppName2}-settings'
   params: {
     webAppName: webAppName2
-    currentAppSettings: list(resourceId('Microsoft.Web/sites/config', webAppName2, 'appsettings'), '2022-03-01').properties
+    currentAppSettings: existingAppSettings
     appSettings: appSettings
   }
   dependsOn: [
