@@ -139,7 +139,7 @@ module webAppSettings 'webAppSettings.bicep' = {
     appSettings: appSettings
   }
   dependsOn: [
-    webApp2, appInsight, storageAccount, cosmosDB, pingAlertRule, availabilityTest, availabilityTestActionGroup, workspace
+    webApp2, pingAlertRule, availabilityTest, availabilityTestActionGroup
   ]
 }
 

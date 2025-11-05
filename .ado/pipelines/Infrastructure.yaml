@@ -33,7 +33,7 @@ stages:
               inlineScript: |
                 az group create --location $(location) --name $(resourceGroupName)
 
-          - task: AzureResourceManagerTemplateDeployment@3.243.1
+          - task: AzureResourceManagerTemplateDeployment@3
             displayName: 'Deploy all infrastructure'
             inputs:
               connectedServiceName: $(azureServiceConnectionName)
@@ -106,7 +106,7 @@ stages:
          
   - stage: 
     displayName: 'Build/Depoy WebApplication1 webapp'
-    # dependsOn: 'Deploy_Infrastructure_stage'
+    dependsOn: 'Deploy_Infrastructure_stage'
 
     variables:
       webAppName: WebApplication1
@@ -124,7 +124,7 @@ stages:
 
   - stage: 
     displayName: 'Build/Deploy Application_Insight webapp'
-    # dependsOn: 'Deploy_Infrastructure_stage'
+    dependsOn: 'Deploy_Infrastructure_stage'
 
     variables:
       webAppName: Application_Insight
