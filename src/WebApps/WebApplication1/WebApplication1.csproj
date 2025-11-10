@@ -18,7 +18,7 @@
 
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.54.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.2" />
-    <PackageReference Include="Microsoft.Identity.Web" Version="4.0.0" />
+    <PackageReference Include="Microsoft.Identity.Web" Version="4.0.1" />
   <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.10" />
     <PackageReference Include="Microsoft.Identity.Web.UI" Version="2.20.0" />
     <PackageReference Include="Microsoft.Identity.Web.DownstreamApi" Version="4.0.1" />
