@@ -117,6 +117,28 @@ module cosmosDB 'cosmosDB.bicep' = {
 }
 
 var appSettings = {
+  APPINSIGHTS_INSTRUMENTATIONKEY: appInsight.outputs.instrumentationKey
+  ApplicationInsightsAgent_EXTENSION_VERSION: '~2' // ~3 if linux
+  XDT_MicrosoftApplicationInsights_Mode: 'recommended'
+  APPLICATIONINSIGHTS_CONNECTION_STRING: appInsight.outputs.appInsightConnectionString
+  ASPNETCORE_ENVIRONMENT: 'Development'
+}
+
+module webAppSettings 'webAppSettings.bicep' = {
+  name: '${webAppName}-settings'
+  params: {
+    webAppName: webAppName
+    currentAppSettings: existingAppSettings
+    appSettings: appSettings
+  }
+  dependsOn: [
+    webApp, pingAlertRule, availabilityTest, availabilityTestActionGroup
+  ]
+}
+
+
+
+var appSettings2 = {
   Hello: 'World'
   APPINSIGHTS_INSTRUMENTATIONKEY: appInsight.outputs.instrumentationKey
   ApplicationInsightsAgent_EXTENSION_VERSION: '~2' // ~3 if linux
@@ -136,7 +158,7 @@ module webAppSettings 'webAppSettings.bicep' = {
   params: {
     webAppName: webAppName2
     currentAppSettings: existingAppSettings
-    appSettings: appSettings
+    appSettings: appSettings2
   }
   dependsOn: [
     webApp2, pingAlertRule, availabilityTest, availabilityTestActionGroup
