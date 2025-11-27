@@ -63,11 +63,7 @@ stages:
               echo "##vso[task.setvariable variable=cosmosDBDatabaseName;isOutput=true]$cosmosDBDatabaseName"
 
               echo "##vso[task.setvariable variable=storageAccountConnectionString;isOutput=true]$storageAccountConnectionString"
-              echo "##vso[task.setvariable variable=reinke;isOutput=true]Davs"
-          - powershell: |
-              echo "output fra powershell 2"
-
-              
+            
   - stage:
     displayName: 'Seed CosmosDB and StorageAccount'
     dependsOn: 'Deploy_Infrastructure_stage'
