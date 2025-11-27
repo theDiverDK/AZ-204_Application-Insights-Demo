@@ -153,7 +153,7 @@ var appSettings2 = {
 
 }
 
-module webAppSettings 'webAppSettings.bicep' = {
+module webAppSettings2 'webAppSettings.bicep' = {
   name: '${webAppName2}-settings'
   params: {
     webAppName: webAppName2
