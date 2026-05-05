@@ -1,5 +1,3 @@
-using Microsoft.ApplicationInsights.DependencyCollector;
-
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplicationInsightsTelemetry(options =>
 {
@@ -18,7 +16,6 @@ builder.Configuration
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.ConfigureTelemetryModule<DependencyTrackingTelemetryModule>((module, o) => { module. EnableSqlCommandTextInstrumentation = true; });
 
 var app = builder.Build();
 

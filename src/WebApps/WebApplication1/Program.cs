@@ -1,4 +1,3 @@
-using Microsoft.ApplicationInsights.DependencyCollector;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -25,7 +24,6 @@ builder.Services.AddControllersWithViews(options =>
 
 builder.Services.AddRazorPages()
     .AddMicrosoftIdentityUI();
-builder.Services.ConfigureTelemetryModule<DependencyTrackingTelemetryModule>((module, o) => { module.EnableSqlCommandTextInstrumentation = true; });
 
 
 
