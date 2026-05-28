@@ -7,7 +7,7 @@ using Microsoft.Identity.Web.UI;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplicationInsightsTelemetry(options =>
 {
-    options.EnableAdaptiveSampling = false;
+    options.SamplingRatio = 1.0f;
 });
 
 // Add services to the container.

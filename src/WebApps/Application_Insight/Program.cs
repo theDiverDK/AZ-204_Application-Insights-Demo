@@ -1,7 +1,7 @@
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplicationInsightsTelemetry(options =>
 {
-    options.EnableAdaptiveSampling = false;
+    options.SamplingRatio = 1.0f;
 });
 
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);

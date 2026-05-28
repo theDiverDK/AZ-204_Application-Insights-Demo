@@ -14,8 +14,8 @@ namespace Application_Insight.Controllers;
 class Product
 {
 
-    public string Name { get; set; }
-    public string id { get; set; }
+    public string? Name { get; set; }
+    public string? id { get; set; }
     public int Age { get; set; }
 }
 
@@ -72,15 +72,13 @@ public class HomeController : Controller
         while (iterator.HasMoreResults)
         {
                FeedResponse<Product> batch =  iterator.ReadNextAsync().GetAwaiter().GetResult();
-               _telemetry.TrackEvent("CosmosDB query page", new Dictionary<string, string>
-               {
-                   ["db.system"] = "cosmosdb",
-                   ["db.name"] = cosmosDbName,
-                   ["db.container"] = cosmosContainerName
-               }, new Dictionary<string, double>
-               {
-                   ["db.cosmosdb.request_charge"] = batch.RequestCharge
-               });
+               var cosmosQueryPageTelemetry = new EventTelemetry("CosmosDB query page");
+               cosmosQueryPageTelemetry.Properties["db.system"] = "cosmosdb";
+               cosmosQueryPageTelemetry.Properties["db.name"] = cosmosDbName;
+               cosmosQueryPageTelemetry.Properties["db.container"] = cosmosContainerName;
+               cosmosQueryPageTelemetry.Properties["db.cosmosdb.request_charge"] = batch.RequestCharge.ToString();
+
+               _telemetry.TrackEvent(cosmosQueryPageTelemetry);
 
                foreach (Product item in batch)
                {

@@ -10,7 +10,7 @@ namespace Application_Insight.Controllers;
 
 class Product
 {
-    public string Name
+    public string? Name
     {
         get;
         set;
@@ -73,15 +73,13 @@ public class HomeController : Controller
         while (iterator.HasMoreResults)
         {
             FeedResponse<Product> batch = iterator.ReadNextAsync().GetAwaiter().GetResult();
-            _telemetry.TrackEvent("CosmosDB query page", new Dictionary<string, string>
-            {
-                ["db.system"] = "cosmosdb",
-                ["db.name"] = cosmosDBDatabaseName ?? string.Empty,
-                ["db.container"] = cosmosDBContainerName ?? string.Empty
-            }, new Dictionary<string, double>
-            {
-                ["db.cosmosdb.request_charge"] = batch.RequestCharge
-            });
+            var cosmosQueryPageTelemetry = new EventTelemetry("CosmosDB query page");
+            cosmosQueryPageTelemetry.Properties["db.system"] = "cosmosdb";
+            cosmosQueryPageTelemetry.Properties["db.name"] = cosmosDBDatabaseName ?? string.Empty;
+            cosmosQueryPageTelemetry.Properties["db.container"] = cosmosDBContainerName ?? string.Empty;
+            cosmosQueryPageTelemetry.Properties["db.cosmosdb.request_charge"] = batch.RequestCharge.ToString();
+
+            _telemetry.TrackEvent(cosmosQueryPageTelemetry);
 
             foreach (Product item in batch)
             {
@@ -104,6 +102,16 @@ public class HomeController : Controller
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
+        try
+        {
+            var answer = 42;
+            var result = answer / 0;
+        }
+        catch
+        {
+        }
+
+
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
