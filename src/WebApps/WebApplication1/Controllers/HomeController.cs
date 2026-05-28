@@ -39,9 +39,10 @@ public class HomeController : Controller
 
     public IActionResult Privacy()
     {
-        var containerConnectionsString=_config.GetConnectionString("StorageAccountConnectionString");// ("https://sasaccount0702.blob.core.windows.net/demo");
+        var storageAccountConnectionString = _config["ConnectionStrings:StorageAccount"];
+        var storageAccountContainerName = _config["Settings:StorageAccountContainerName"];
 
-        var containerClient = new BlobContainerClient("DefaultEndpointsProtocol=https;AccountName=az204testst;AccountKey=Ttc0BSS7ZYLBb2/R+L8fyWOFKPFLst9d0hluhs8DTWoZzgSVLqF8gnBb4A2AX0Lo/R2JshAXqXml+ASt642tDg==;EndpointSuffix=core.windows.net", "files");
+        var containerClient = new BlobContainerClient(storageAccountConnectionString, storageAccountContainerName);
 
         var data = containerClient.GetBlobs();
 
@@ -49,19 +50,20 @@ public class HomeController : Controller
 
         ViewBag.data = result;
 
-        var client = new CosmosClient("AccountEndpoint=https://az204-test-cosmosdb.documents.azure.com:443/;AccountKey=WAzQi9Rf5q4B5dXIIDWnflwjf68UNa0olnxR4hSz0M67LaqWHfYvweQgkZO4GWkp1QxZeTCiFIGdACDbuhXI3g==;");//_config.GetConnectionString("CosmosDBConnectionString"));
-        var db = client.GetDatabase("az204-test-database");
-        var container = db.GetContainer("az204-test-container");
+        var cosmosDbConnectionString = _config["ConnectionStrings:CosmosDB"];
+        var cosmosDbName = _config["Settings:CosmosDBDatabaseName"];
+        var cosmosContainerName = _config["Settings:CosmosDBContainerName"];
 
-        var cosmosDbName = "az204-test-database";
-        var cosmosContainerName = "az204-test-container";
+        var client = new CosmosClient(cosmosDbConnectionString);
+        var db = client.GetDatabase(cosmosDbName);
+        var container = db.GetContainer(cosmosContainerName);
         var queryText = "SELECT * FROM c";
         var query = new QueryDefinition(queryText);
         _telemetry.TrackTrace("CosmosDB SQL query executed", SeverityLevel.Information, new Dictionary<string, string>
         {
             ["db.system"] = "cosmosdb",
-            ["db.name"] = cosmosDbName,
-            ["db.container"] = cosmosContainerName,
+            ["db.name"] = cosmosDbName ?? string.Empty,
+            ["db.container"] = cosmosContainerName ?? string.Empty,
             ["db.statement"] = query.QueryText
         });
 
@@ -74,8 +76,8 @@ public class HomeController : Controller
                FeedResponse<Product> batch =  iterator.ReadNextAsync().GetAwaiter().GetResult();
                var cosmosQueryPageTelemetry = new EventTelemetry("CosmosDB query page");
                cosmosQueryPageTelemetry.Properties["db.system"] = "cosmosdb";
-               cosmosQueryPageTelemetry.Properties["db.name"] = cosmosDbName;
-               cosmosQueryPageTelemetry.Properties["db.container"] = cosmosContainerName;
+               cosmosQueryPageTelemetry.Properties["db.name"] = cosmosDbName ?? string.Empty;
+               cosmosQueryPageTelemetry.Properties["db.container"] = cosmosContainerName ?? string.Empty;
                cosmosQueryPageTelemetry.Properties["db.cosmosdb.request_charge"] = batch.RequestCharge.ToString();
 
                _telemetry.TrackEvent(cosmosQueryPageTelemetry);
