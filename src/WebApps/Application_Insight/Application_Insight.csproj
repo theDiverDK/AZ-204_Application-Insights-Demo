@@ -9,7 +9,7 @@
     <ItemGroup>
       <PackageReference Include="Azure.Identity" Version="1.21.0" />
 
-      <PackageReference Include="Azure.Storage.Blobs" Version="12.29.2" />
+      <PackageReference Include="Azure.Storage.Blobs" Version="12.30.2" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.34" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.34" />
       <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.63.3" />
