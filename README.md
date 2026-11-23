@@ -1,4 +1,4 @@
-# AZ-204 Application Insights Demo - se det virker
+# AZ-204 Application Insights Demo
 
 An Azure learning demo that provisions an Application Insights-backed web workload and supporting Azure resources. It is intended for experimenting with telemetry, availability checks, alerts, and exception monitoring in the context of AZ-204.
 
